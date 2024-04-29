@@ -17,7 +17,7 @@ The repository consists of an Rproject ([meta-analysis_IGEs.Rproj](https://githu
 ## Information about scripts, folders and files within:
 
 Scripts:
--	[001_systematic_review.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/001_systematic_review.R): used to import the results of the systematic literature review conducted in Web of Science and Scopus.
+-	[001_systematic_review.R ](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/001_systematic_review.R): used to import the results of the systematic literature review conducted in Web of Science and Scopus.
   
     * Input: Web of Science and Scopus keyword search, and the 8 .bib files corresponding to the snowballing search
       - Web of Science keyword search results: [WoS_IGEs_search.bib](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/systematic_search/WoS_IGEs_search.bib)
@@ -30,7 +30,7 @@ Scripts:
       - [Deduplicated full reference list](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/IGE_search_unique_references_rayyan.csv) to be imported into [Rayyan](https://rayyan.qcri.org/) for the title-and-abstract screening
       - [R session information](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/deduplicating_Rpackages_session.txt) for reproducibility purposes
   
--	[002_fulltext_screening.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/002_fulltext_screening.R): used to import the results of the title-and-abstract screening conducted using [Rayyan](https://rayyan.qcri.org/) and to generate the database needed to proceed with the full-text screening phase.
+-	[002_fulltext_screening.R ](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/002_fulltext_screening.R): used to import the results of the title-and-abstract screening conducted using [Rayyan](https://rayyan.qcri.org/) and to generate the database needed to proceed with the full-text screening phase.
   
     * Input:
       - [List of unique reference list with title-and-abstract decisions](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/title_and_abstract_screening/title-and-abstract_decisions_rayyan_studyID.csv)
@@ -39,7 +39,7 @@ Scripts:
       - Four full-text screening subsets (as .xlsx files) including the list of references assigned to each of the 4 observers. Files available [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/fulltext_screening)
       - [R session information](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/fulltext_screening/fulltext_templates_Rpackages_session.txt) for reproducibility purposes
       
--	[003_data_extraction.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/003_data_extraction.R): used to import the results of the full-text screening and to generate the databases needed to proceed to the data extraction phase.
+-	[003_data_extraction.R ](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/003_data_extraction.R): used to import the results of the full-text screening and to generate the databases needed to proceed to the data extraction phase.
   
     * Input:
       - [List of unique reference list with title-and-abstract decisions](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/title_and_abstract_screening/title-and-abstract_decisions_rayyan_studyID.csv)
@@ -50,7 +50,7 @@ Scripts:
       - Four data-extraction subsets (as .xlsx files) including the list of references assigned to each of the 4 observers. Files available [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/data_extraction)
       - Four data double-extraction subsets (as .xlsx files) including the list of references assigned to each of the 4 observers. Files available [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/data_extraction/double-checking)
         
--	[004_dataset_cleaning.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/004_dataset_cleaning.R): used to clean the meta-analytic dataset and generate the version for the analyses that is imported by [005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r).
+-	[004_dataset_cleaning.R ](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/004_dataset_cleaning.R): used to clean the meta-analytic dataset and generate the version for the analyses that is imported by [005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r).
   
     * Input:
       - Four datasets with the full data extraction of each of the 4 observers. The four files are .csv and their name starts with '*Data from papers*'. All available [here]([https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/data_extraction](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data))
@@ -61,10 +61,10 @@ Scripts:
       - [List of references before contacting authors](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/fulldataset.csv)
       - [Full list of references with data, including data obtained by author correspondence](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/dataset_final_after_cleaning_and_adding_author_contact_FS_MM.csv). This list will be imported by [005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r) for the analyses
         
--	[005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r): used to perform all the analyses.
+-	[005_data_analysis.r ](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r): used to perform all the analyses.
   
     * Input: 
-      - [Final dataset for analyses](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/dataset_final_after_cleaning_and_adding_author_contact_FS_MM.csv)
+      - [Final dataset for analyses](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/dataset_final_after_cleaning_and_adding_author_contact_FS_MM.csv): the metadata providing a description for each of the variables is available [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/dataset_final_after_cleaning_and_adding_author_contact_FS_MM_METADATA.txt)
       - [Taxonomic data extracted from the Open Tree of Life](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/taxa_Open_Tree_of_Life.RData) created by this script and then imported for reproducibility purposes
       - [Tree file](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/tree.Rdata) created by this script and then imported for reproducibility purposes
       - [Phylogenetic correlation matrix](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/phylo_cor.Rdata) created by this script and then imported for reproducibility purposes
@@ -76,7 +76,7 @@ Scripts:
       - Meta-analytic and meta-regression models. All available as .RData [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data/models) and will be imported by [006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r) for generating the figures.
       - Model-specific datasets. All available as .csv [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data/subsets) and will be imported by [006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r) for generating the figures.
         
--	[006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r): used to generate the all figures included in the main text and the supplementary materials (except Figure 1 from the main text).
+-	[006_figures.r ](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r): used to generate the all figures included in the main text and the supplementary materials (except Figure 1 from the main text).
   
     * Input:
       - Meta-analytic and meta-regression models from [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data/models)
