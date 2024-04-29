@@ -113,17 +113,17 @@
 
 #Some decisions made####
 
-# We agreed to remove non-Gaussian traits, there aren?€™t many (9 I think) and they cause headaches for various reasons. Removing them removed the 2 big outliers on the funnel plots.
+# We agreed to remove non-Gaussian traits, there aren???t many (9 I think) and they cause headaches for various reasons. Removing them removed the 2 big outliers on the funnel plots.
 # 
-# For VP, while summing all the reported variance components seems a rubbish way of back calculating VP, dividing Va by H2 actually seems quite good. Therefore, we think we should use the value for VP the authors reported if it is there, and use Va/H2 if it is not (new variable: ?€œTotal_v_phen3?€? which is used throughout moving forward)).
+# For VP, while summing all the reported variance components seems a rubbish way of back calculating VP, dividing Va by H2 actually seems quite good. Therefore, we think we should use the value for VP the authors reported if it is there, and use Va/H2 if it is not (new variable: ???Total_v_phen3??? which is used throughout moving forward)).
 # 
-# For H2 and Social H2, we are happy to use the author reported values if it is there, and do the calculations Va/VP and Vige/VP if not reported. I?€™ve moved the new back-calculation of VP to the start of the script so that we can use the new values for these calculations if necessary. Doing this adds some values but not a very large number (new variables: ?€œH2_2?€? and ?€œSocial_h2_2?€? which are to be used for the analyses).
+# For H2 and Social H2, we are happy to use the author reported values if it is there, and do the calculations Va/VP and Vige/VP if not reported. I???ve moved the new back-calculation of VP to the start of the script so that we can use the new values for these calculations if necessary. Doing this adds some values but not a very large number (new variables: ???H2_2??? and ???Social_h2_2??? which are to be used for the analyses).
 # 
-# We looked at doing something similar for calculating the total heritability (T2), as we can 1) calculate the Total breeding values (TBV) for studies that do not report it and 2) do TBV/VP to get T2 for studies that do not report T2. However, this does not actually add that many values (110 -> 123), and the relationship between reported and calculated T2 (in studies where we can get both) isn?€™t as good as for the other variable we?€™ve back-calculated, so for this variable it seems better to stick to only author reported values. Perhaps this slight inconsistency will seem odd to readers though?
+# We looked at doing something similar for calculating the total heritability (T2), as we can 1) calculate the Total breeding values (TBV) for studies that do not report it and 2) do TBV/VP to get T2 for studies that do not report T2. However, this does not actually add that many values (110 -> 123), and the relationship between reported and calculated T2 (in studies where we can get both) isn???t as good as for the other variable we???ve back-calculated, so for this variable it seems better to stick to only author reported values. Perhaps this slight inconsistency will seem odd to readers though?
 #   
-#   An important variable we want to analyse is the DGE-IGE correlation. We can calculate this if authors do not report it, and then use either reported values or this one for analyses moving forward (new variable: ?€œR_a_ige_2?€? which is to be used for the analyses). We think we can subject this to formal meta-analysis since it is bound between -1 and 1 but the function r.to.Zr did not work, perhaps due to the negative values?
+#   An important variable we want to analyse is the DGE-IGE correlation. We can calculate this if authors do not report it, and then use either reported values or this one for analyses moving forward (new variable: ???R_a_ige_2??? which is to be used for the analyses). We think we can subject this to formal meta-analysis since it is bound between -1 and 1 but the function r.to.Zr did not work, perhaps due to the negative values?
 #   
-#   We also discussed what measure of evolvability we want to do and settled on ?€œI?€? e.g. I_A= Va/trait_mean^2 and I_IGE= Vige/trait_mean^2.  We now calculate that for most values in the script, but not if the trait has been variance standardised and not if the trait had a very low mean (e.g. < 0.001) as this created huge values which just seem unrealistic.
+#   We also discussed what measure of evolvability we want to do and settled on ???I??? e.g. I_A= Va/trait_mean^2 and I_IGE= Vige/trait_mean^2.  We now calculate that for most values in the script, but not if the trait has been variance standardised and not if the trait had a very low mean (e.g. < 0.001) as this created huge values which just seem unrealistic.
 #   
 #   Finally, is there something you think we should be doing to in general assess how important IGEs are compared to just DGEs? Are we comparing means of Va vs Vige, h2 vs h2 social, h2 vs T2, I_A vs I_IGE, or something more than that?
 #     
@@ -588,19 +588,19 @@ diag(subset1A_VCV_ESVar) <- dataset.IGE.subset1A[,"VZr"]
 
 # Raw data funnel plot 
 
-# DF: no more outliers after removing non-Gaussian traits and using parameters 
-# if they are reported and calculating them if not 
-par(mfrow=c(1, 2))
-funnel(dataset.IGE.subset1A$Social_h2_2_Zr, 
-       dataset.IGE.subset1A$VZr,
-       yaxis="sei",
-       xlab="Effect size (Zr)", 
-       digits=2, las=1) 
-funnel(dataset.IGE.subset1A$Social_h2_2_Zr, 
-       dataset.IGE.subset1A$VZr, 
-       yaxis="seinv",
-       xlab="Effect size (Zr)",  
-       digits=2, las=1) 
+# # DF: no more outliers after removing non-Gaussian traits and using parameters 
+# # if they are reported and calculating them if not 
+# par(mfrow=c(1, 2))
+# funnel(dataset.IGE.subset1A$Social_h2_2_Zr, 
+#        dataset.IGE.subset1A$VZr,
+#        yaxis="sei",
+#        xlab="Effect size (Zr)", 
+#        digits=2, las=1) 
+# funnel(dataset.IGE.subset1A$Social_h2_2_Zr, 
+#        dataset.IGE.subset1A$VZr, 
+#        yaxis="seinv",
+#        xlab="Effect size (Zr)",  
+#        digits=2, las=1) 
 
 
 # creating a copy of Species_name.2 for phylogenetic effect
@@ -636,6 +636,10 @@ meta.model.IGE.subset1A <- rma.mv(Social_h2_2_Zr,
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset1A, file = "data/models/meta_model_IGE_subset1A.Rdata")
 
+# model can be loaded instead of run using the following
+# load("data/models/meta_model_IGE_subset1A.Rdata")
+
+
 # Printing the summary results of the model
 print(meta.model.IGE.subset1A, digits=3)
 
@@ -662,25 +666,6 @@ predict(meta.model.IGE.subset1A, digits=3)
 # ourselves (although did use the social H2 we calculated) probably just higher 
 # values in that context i.e. feather pecking other value is a gull laying date 
 # paper - nothing obviously wrong
-
-
-# # Estimating heterogeneity as I2 (Nakagawa and Santos 2012)
-# # class(meta.model.IGE.subset1A) <- "rma"
-# #I2.model.1A <- i2_ml(meta.model.IGE.subset1A, boot=1000)
-# I2.model.1A <- i2_ml(meta.model.IGE.subset1A)
-# round(I2.model.1A, 1)
-# 
-# #                         Est. 2.5% 97.5%
-# # I2_Total                93.5 91.2  95.9
-# # I2_Paper_id             62.0 37.5  89.2
-# # I2_Group_id              0.1  0.0   0.9
-# # I2_Population2           0.0  0.0   4.9
-# # I2_Species_name.2       14.3  0.0  25.3
-# # I2_Species_name.2.phylo 14.3  0.0  25.3
-# # I2_Record_id             5.0  2.6   8.6
-# 
-# #I2_CI <- I2(meta.model.IGE.subset1A, subset1A_VCV_ESVar , ME = FALSE, sims = 10000, phylo = "Species_name.2.phylo", obs = "Record_id")
-# #I2_CI
 
 
 # using pluralistic approach to explore heterogeneity (Yang et al. 2023)
@@ -752,18 +737,18 @@ for (i in 1:dim(combinations.subset1Aii)[1]) {
 # Enters previously calculated effect size sampling variances into diagonals 
 diag(subset1Aii_VCV_ESVar) <- dataset.IGE.subset1Aii[,"VZr"]
 
-# Raw data funnel plot 
-par(mfrow=c(1, 2))
-funnel(dataset.IGE.subset1Aii$Social_h2_2_Zr, 
-       dataset.IGE.subset1Aii$VZr,
-       yaxis="sei",
-       xlab="Effect size (Zr)", 
-       digits=2, las=1) 
-funnel(dataset.IGE.subset1Aii$Social_h2_2_Zr, 
-       dataset.IGE.subset1Aii$VZr, 
-       yaxis="seinv",
-       xlab="Effect size (Zr)",  
-       digits=2, las=1) 
+# # Raw data funnel plot 
+# par(mfrow=c(1, 2))
+# funnel(dataset.IGE.subset1Aii$Social_h2_2_Zr, 
+#        dataset.IGE.subset1Aii$VZr,
+#        yaxis="sei",
+#        xlab="Effect size (Zr)", 
+#        digits=2, las=1) 
+# funnel(dataset.IGE.subset1Aii$Social_h2_2_Zr, 
+#        dataset.IGE.subset1Aii$VZr, 
+#        yaxis="seinv",
+#        xlab="Effect size (Zr)",  
+#        digits=2, las=1) 
 
 
 # creating a copy of Species_name.2 for phylogenetic effect
@@ -834,6 +819,8 @@ IGEmeta.regression.FEPartner <- rma.mv(Social_h2_2_Zr,
 save(IGEmeta.regression.FEPartner, 
      file = "data/models/IGEmeta_regression_FEPartner.Rdata")
 
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_FEPartner.Rdata")
 
 # Printing the summary results of the model
 print(IGEmeta.regression.FEPartner, digits=3)
@@ -895,6 +882,9 @@ IGEmeta.regression.TraitCat <- rma.mv(Social_h2_2_Zr,
 # saving the model for script 006_figures.R
 save(IGEmeta.regression.TraitCat, 
      file = "data/models/IGEmeta_regression_TraitCat.Rdata")
+
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_TraitCat.Rdata")
 
 # Printing the summary results of the model
 print(IGEmeta.regression.TraitCat, digits=3)
@@ -965,6 +955,9 @@ IGEmeta.regression.Age <- rma.mv(Social_h2_2_Zr,
 save(IGEmeta.regression.Age, 
      file = "data/models/IGEmeta_regression_Age.Rdata")
 
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_Age.Rdata")
+
 # Printing the summary results of the model
 print(IGEmeta.regression.Age, digits=3)
 
@@ -1021,6 +1014,9 @@ IGEmeta.regression.Sex <- rma.mv(Social_h2_2_Zr,
 save(IGEmeta.regression.Sex, 
      file = "data/models/IGEmeta_regression_Sex.Rdata")
 
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_Sex.Rdata")
+
 # Printing the summary results of the model
 print(IGEmeta.regression.Sex, digits=3)
 
@@ -1076,6 +1072,9 @@ IGEmeta.regression.StudyType <- rma.mv(Social_h2_2_Zr,
 save(IGEmeta.regression.StudyType, 
      file = "data/models/IGEmeta_regression_StudyType.Rdata")
 
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_StudyType.Rdata")
+
 # Printing the summary results of the model
 print(IGEmeta.regression.StudyType, digits=3)
 
@@ -1125,6 +1124,9 @@ IGEmeta.regression.PopType <- rma.mv(Social_h2_2_Zr,
 # saving the model for script 006_figures.R
 save(IGEmeta.regression.PopType, 
      file = "data/models/IGEmeta_regression_PopType.Rdata")
+
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_PopType.Rdata")
 
 # Printing the summary results of the model
 print(IGEmeta.regression.PopType, digits=3)
@@ -1192,6 +1194,9 @@ IGEmeta.regression.Livestock <- rma.mv(Social_h2_2_Zr,
 # saving the model for script 006_figures.R
 save(IGEmeta.regression.Livestock, 
      file = "data/models/IGEmeta_regression_Livestock.Rdata")
+
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_Livestock.Rdata")
 
 # Printing the summary results of the model
 print(IGEmeta.regression.Livestock, digits=3)
@@ -1392,6 +1397,9 @@ meta.model.IGE.subset3A_no_zeros <- rma.mv(dat3A_var_l,
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset3A_no_zeros, 
      file = "data/models/IGEmeta_regression_Va_vs_Vige.Rdata")
+
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_Va_vs_Vige.Rdata")
 
 # Printing the summary results of the model
 print(meta.model.IGE.subset3A_no_zeros, digits=3)
@@ -1633,9 +1641,6 @@ meta.model.DGE.subset1A <- rma.mv(r.to.Zr(dataset.IGE.subset1A$H2_2),
                                   data = dataset.IGE.subset1A)
 
 
-# # saving the model for script 006_figures.R
-# save(meta.model.DGE.subset1A, file = "data/models/meta_model_DGE_subset1A.Rdata")
-
 # Printing the summary results of the model
 print(meta.model.DGE.subset1A, digits=3)
 
@@ -1762,6 +1767,9 @@ meta.model.IGE.subset3B <- rma.mv(dat3B_Zr,
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset3B, 
      file = "data/models/IGEmeta_regression_h2_vs_socialh2.Rdata")
+
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_h2_vs_socialh2.Rdata")
 
 # Printing the summary results of the model
 print(meta.model.IGE.subset3B, digits=3)
@@ -1942,6 +1950,9 @@ meta.model.IGE.subset3C <- rma.mv(dat3C_I,
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset3C, 
      file = "data/models/IGEmeta_regression_Ia_vs_Iige.Rdata")
+
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_Ia_vs_Iige.Rdata")
 
 # Printing the summary results of the model
 print(meta.model.IGE.subset3C, digits=3)
@@ -2163,6 +2174,9 @@ meta.model.IGE.subset4A <- rma.mv(dat4A_herit,
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset4A, 
      file = "data/models/IGEmeta_regression_h2_vs_Totalh2.Rdata")
+
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_h2_vs_Totalh2.Rdata")
 
 print(meta.model.IGE.subset4A, digits=3)
 
@@ -2560,19 +2574,19 @@ for (i in 1:dim(combinations.subset4B)[1]) {
 # Enters previously calculated effect size sampling variances into diagonals 
 diag(subset4B_VCV_ESVar) <- dataset.IGE.subset4B[,"VZr"]
 
-# Raw data funnel plot 
-par(mfrow=c(1, 2))
-funnel(dataset.IGE.subset4B$Social_h2_2_Zr, 
-       dataset.IGE.subset4B$VZr,
-       yaxis="sei",
-       xlab="Effect size (Zr)", 
-       digits=2, las=1) 
-funnel(dataset.IGE.subset4B$Social_h2_2_Zr, 
-       dataset.IGE.subset4B$VZr, 
-       yaxis="seinv",
-       xlab="Effect size (Zr)",  
-       digits=2, las=1) 
-# Looks OK
+# # Raw data funnel plot 
+# par(mfrow=c(1, 2))
+# funnel(dataset.IGE.subset4B$Social_h2_2_Zr, 
+#        dataset.IGE.subset4B$VZr,
+#        yaxis="sei",
+#        xlab="Effect size (Zr)", 
+#        digits=2, las=1) 
+# funnel(dataset.IGE.subset4B$Social_h2_2_Zr, 
+#        dataset.IGE.subset4B$VZr, 
+#        yaxis="seinv",
+#        xlab="Effect size (Zr)",  
+#        digits=2, las=1) 
+# # Looks OK
 
 # creating a copy of Species_name.2 for phylogenetic effect
 dataset.IGE.subset4B$Species_name.2.phylo <- dataset.IGE.subset4B$Species_name.2
@@ -2603,6 +2617,9 @@ meta.model.IGE.subset4B <- rma.mv(R_a_ige_2_Zr,
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset4B, file = "data/models/meta_model_IGE_DGE-IGE_correlation.Rdata")
 
+# model can be loaded instead of run using the following
+# load("data/models/meta_model_IGE_DGE-IGE_correlation.Rdata")
+
 # Printing the summary results of the model
 print(meta.model.IGE.subset4B, digits=3)
 
@@ -2613,9 +2630,9 @@ print(meta.model.IGE.subset4B, digits=3)
 # as those included in the current database
 predict(meta.model.IGE.subset4B, digits=3)
 
-# Model funnel plots
-par(mfrow = c(1, 1))
-funnel(meta.model.IGE.subset4B) # lovely spread
+# # Model funnel plots
+# par(mfrow = c(1, 1))
+# funnel(meta.model.IGE.subset4B) # lovely spread
 
 
 # # We can look for potential outliers based on the residuals of the model
@@ -2627,20 +2644,6 @@ funnel(meta.model.IGE.subset4B) # lovely spread
 # dataset.IGE.subset4B[resid$z > 2,]
 # these are all very strong positive corrs (0.98+), 3 reported, 2 calculated
 
-
-# # Estimating heterogeneity as I2 (Nakagawa and Santos 2012)
-# #I2.model.4B <- i2_ml(meta.model.IGE.subset4B,data = dataset.IGE.subset4B, boot=10)
-# I2.model.4B <- i2_ml(meta.model.IGE.subset4B)
-# round(I2.model.4B, 2)
-# 
-# #                         Est. 2.5% 97.5%
-# # I2_Total                99.98 99.97 99.98
-# # I2_Paper_id              0.00  0.00 14.72
-# # I2_Group_id              0.00  0.00 22.53
-# # I2_Population2          10.77  0.00 30.90
-# # I2_Species_name.2       12.94  0.33 22.80
-# # I2_Species_name.2.phylo 12.94  0.33 22.80
-# # I2_Record_id            54.88 43.36 71.56
 
 # using pluralistic approach to explore heterogeneity (Yang et al. 2023)
 
@@ -2734,6 +2737,9 @@ meta.model.IGE.subset1A.SSE <- rma.mv(Social_h2_2_Zr,
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset1A.SSE, file = "data/models/meta_model_IGE_subset1A_SSE.Rdata")
 
+# model can be loaded instead of run using the following
+# load("data/models/meta_model_IGE_subset1A_SSE.Rdata")
+
 summary(meta.model.IGE.subset1A.SSE,digits = 3) 
 # since the slope is not different from 0, there is no evidence of asymmetry in
 # the funnel plot, and thus, no evidence of small-study effects in this dataset
@@ -2794,6 +2800,9 @@ meta.model.IGE.subset1A.DE <- rma.mv(Social_h2_2_Zr,
 
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset1A.DE, file = "data/models/meta_model_IGE_subset1A_DE.Rdata")
+
+# model can be loaded instead of run using the following
+# load("data/models/meta_model_IGE_subset1A_DE.Rdata")
 
 summary(meta.model.IGE.subset1A.DE,3) 
 # since the slope is not different from 0, there is no evidence of decline
