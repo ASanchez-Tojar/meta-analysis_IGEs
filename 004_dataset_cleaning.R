@@ -4,7 +4,7 @@
 #
 # Francesca Santostefano
 # Profile: https://www.researchgate.net/profile/Francesca-Santostefano
-# Universit? du Qu?bec ? Montr?al
+# University du Quebec Montreal
 # Email: santostefano.francesca@courrier.uqam.ca
 #
 # David Fisher
@@ -20,8 +20,6 @@
 ##############################################################
 # Description of script and Instructions
 ##############################################################
-
-# Script first created the xth of xx 202x
 
 # This script is to import and clean the data collected for a systematic review
 # on indirect genetic effects conducted in Web of Science and
