@@ -64,19 +64,26 @@ Scripts:
 -	[005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r): used to perform all the analyses.
   
     * Input: 
-      - xxx
+      - [Final dataset for analyses](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/dataset_final_after_cleaning_and_adding_author_contact_FS_MM.csv)
+      - [Taxonomic data extracted from the Open Tree of Life](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/taxa_Open_Tree_of_Life.RData) created by this script and then imported for reproducibility purposes
+      - [Tree file](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/tree.Rdata) created by this script and then imported for reproducibility purposes
+      - [Phylogenetic correlation matrix](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/phylo_cor.Rdata) created by this script and then imported for reproducibility purposes
     
     * Output:
       - [Taxonomic data extracted from the Open Tree of Life](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/taxa_Open_Tree_of_Life.RData) using the function 'tnrs_match_names()'
-      - 
+      - [Tree file](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/tree.Rdata)
+      - [Phylogenetic correlation matrix](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/phylo_cor.Rdata)
+      - Meta-analytic and meta-regression models. All available as .RData [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data/models) and will be imported by [006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r) for generating the figures.
+      - Model-specific datasets. All available as .csv [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data/subsets) and will be imported by [006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r) for generating the figures.
         
 -	[006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r): used to generate the all figures included in the main text and the supplementary materials (except Figure 1 from the main text).
   
     * Input:
-      - xxx
+      - Meta-analytic and meta-regression models from [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data/models)
+      - Model-specific datasets from [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data/subsets)
     
     * Output:
-      - All figures included in the main text and the supplementary materials (except Figure 1 from the main text)
+      - [All figures](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/figures) included in the main text and the supplementary materials (except Figure 1 from the main text)
 
 Folders:
 -	[literature_review](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review):
