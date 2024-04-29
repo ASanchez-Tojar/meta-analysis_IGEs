@@ -217,13 +217,9 @@ IGEmeta.regression.Sex_plot = IGEmeta.regression.Sex_plot +
         axis.title.x = element_text(size = 15),
         axis.text.y = element_text(size = 15), 
         axis.text.x = element_text(size = 10))
-  # theme(plot.title = element_text(face="bold", size = 12,hjust = 0.5),
-  #                                 axis.title.y = element_text(size = 15),
-  #                                 axis.title.x = element_blank(size = 15),
-  #                                 axis.text.y = element_text(size = 15), 
-  #                                 axis.text.x = element_text(size = 10))
 
-IGEmeta.regression.Sex_plot
+
+#IGEmeta.regression.Sex_plot
 
 # ################################################################################
 # # Study type
@@ -323,9 +319,6 @@ fig3T=annotate_figure(fig3, top = text_grob(expression(bold(Social~h^2)),
 ggsave("figures/Fig3A-E.png", plot = last_plot(), 
        height = 250, width = 400, units = "mm", dpi = 600,bg ="white")
 
-# pdf("Fig.3.pdf", width=14, height=8, onefile=F)
-# dev.off()
-
 
 ################################################################################
 # Q3:. What's the relative and absolute importance of direct and indirect  
@@ -365,7 +358,7 @@ IGEmeta.regression.Va.vs.Vige_plot <- orchard_plot(mod_results(meta.model.IGE.su
               axis.title.x = element_text(size = 15),
               axis.text.x = element_text(size = 10))
 
-IGEmeta.regression.Va.vs.Vige_plot
+#IGEmeta.regression.Va.vs.Vige_plot
 
 ################################################################################
 # 3B: h2 vs social h2
@@ -394,7 +387,7 @@ IGEmeta.regression.h2.vs.socialh2_plot <- orchard_plot(mod_results(meta.model.IG
         axis.title.x = element_text(size = 15),
         axis.text.x = element_text(size = 10))
 
-IGEmeta.regression.h2.vs.socialh2_plot
+# IGEmeta.regression.h2.vs.socialh2_plot
 
 ################################################################################
 # 3C: Ia vs Ii
@@ -421,7 +414,7 @@ IGEmeta.regression.Ia.vs.Iige_plot <- orchard_plot(mod_results(meta.model.IGE.su
         axis.title.x = element_text(size = 15),
         axis.text.x = element_text(size = 10))
 
-IGEmeta.regression.Ia.vs.Iige_plot
+# IGEmeta.regression.Ia.vs.Iige_plot
 
 
 fig4 <- ggarrange(IGEmeta.regression.Va.vs.Vige_plot,IGEmeta.regression.h2.vs.socialh2_plot,
@@ -429,7 +422,7 @@ fig4 <- ggarrange(IGEmeta.regression.Va.vs.Vige_plot,IGEmeta.regression.h2.vs.so
                   labels = c("(a)", "(b)","(c)"),common.legend = T,
                   font.label=list(color="black",size=10)) + bgcolor("white") 
 
-fig4
+# fig4
 
 ggsave("figures/Fig4A-C.png", plot = fig4, 
       height = 150, width = 250, units = "mm", dpi = 600)
@@ -466,7 +459,7 @@ IGEmeta.regression.h2.vs.Totalh2_plot <- orchard_plot(mod_results(meta.model.IGE
         axis.text.y = element_text(size = 15, angle = 90, vjust = 0.5, hjust=0.5),
         axis.text.x = element_text(size = 15))
 
-IGEmeta.regression.h2.vs.Totalh2_plot
+#IGEmeta.regression.h2.vs.Totalh2_plot
 
 
 ################################################################################
@@ -486,7 +479,6 @@ meta.model.IGE.DGE.IGE.correlation_plot <- orchard_plot(mod_results(meta.model.I
                                                         alpha = 0.5,
                                                         transfm = "tanh",
                                                         fill = T)+
-  #ggtitle("DGE-IGE correlation") +
   scale_fill_manual(values="grey") +
   scale_colour_manual(values="grey")+
   theme(plot.title = element_text(face="bold", size = 15,hjust = 0.5),
@@ -497,13 +489,13 @@ meta.model.IGE.DGE.IGE.correlation_plot <- orchard_plot(mod_results(meta.model.I
       axis.text.y = element_blank()) +
   labs( x="DGE-IGE correlation")
 
-meta.model.IGE.DGE.IGE.correlation_plot
+#meta.model.IGE.DGE.IGE.correlation_plot
 
 fig5 <- ggarrange(IGEmeta.regression.h2.vs.Totalh2_plot,meta.model.IGE.DGE.IGE.correlation_plot, ncol = 2,  nrow = 1, 
                   labels = c("(a)", "(b)"), common.legend = T,
                   font.label=list(color="black",size=10)) 
 
-fig5
+#fig5
 
 ggsave("figures/Fig5A-B.png", 
        plot = fig5, height = 100, width = 200, units = "mm", dpi = 600, bg="white")
