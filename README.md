@@ -31,17 +31,61 @@ Scripts:
       - [R session information](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/deduplicating_Rpackages_session.txt) for reproducibility purposes
   
 -	[002_fulltext_screening.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/002_fulltext_screening.R): used to import the results of the title-and-abstract screening conducted using [Rayyan](https://rayyan.qcri.org/) and to generate the database needed to proceed with the full-text screening phase.
+  
+    * Input:
+      - [List of unique reference list with title-and-abstract decisions](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/title_and_abstract_screening/title-and-abstract_decisions_rayyan_studyID.csv)
+    
+    * Output:
+      - Four full-text screening subsets (as .xlsx files) including the list of references assigned to each of the 4 observers. Files available [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/fulltext_screening)
+      - [R session information](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/fulltext_screening/fulltext_templates_Rpackages_session.txt) for reproducibility purposes
+      
 -	[003_data_extraction.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/003_data_extraction.R): used to import the results of the full-text screening and to generate the databases needed to proceed to the data extraction phase.
+  
+    * Input:
+      - [List of unique reference list with title-and-abstract decisions](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/title_and_abstract_screening/title-and-abstract_decisions_rayyan_studyID.csv)
+      - [Final list of studies included after full-text screening](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/fulltext_screening/Final_fulltext_screening_responses_including_conflict_resolution_google_form_data.xlsx)
+      - [Final list of studies included after full-text screening and using animal models](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/data_extraction/animal_model_papers_to_be_assigned_20200703.csv)
+    
+    * Output:
+      - Four data-extraction subsets (as .xlsx files) including the list of references assigned to each of the 4 observers. Files available [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/data_extraction)
+      - Four data double-extraction subsets (as .xlsx files) including the list of references assigned to each of the 4 observers. Files available [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/data_extraction/double-checking)
+        
 -	[004_dataset_cleaning.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/004_dataset_cleaning.R): used to clean the meta-analytic dataset and generate the version for the analyses that is imported by [005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r).
+  
+    * Input:
+      - Four datasets with the full data extraction of each of the 4 observers. The four files are .csv and their name starts with '*Data from papers*'. All available [here]([https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/data_extraction](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data))
+      - [Final list of studies included after full-text screening and using animal models](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/animal_model_papers_to_be_assigned_full.csv)
+      - [List of references created by this script before contacting authors, edited outside R, and imported back to be filled after having contacted the authors](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/fulldataset.csv)
+    
+    * Output:
+      - [List of references before contacting authors](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/fulldataset.csv)
+      - [Full list of references with data, including data obtained by author correspondence](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/dataset_final_after_cleaning_and_adding_author_contact_FS_MM.csv). This list will be imported by [005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r) for the analyses
+        
 -	[005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r): used to perform all the analyses.
+  
+    * Input: 
+      - xxx
+    
+    * Output:
+      - [Taxonomic data extracted from the Open Tree of Life](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/taxa_Open_Tree_of_Life.RData) using the function 'tnrs_match_names()'
+      - 
+        
 -	[006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r): used to generate the all figures included in the main text and the supplementary materials (except Figure 1 from the main text).
+  
+    * Input:
+      - xxx
+    
+    * Output:
+      - All figures included in the main text and the supplementary materials (except Figure 1 from the main text)
 
 Folders:
 -	[literature_review](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review):
     * [systematic_search](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/systematic_search): contains 2 .bib files imported by [001_systematic_review.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/001_systematic_review.R)
     * [snowballing](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/snowballing): contains 8 .bib files imported by [001_systematic_review.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/001_systematic_review.R)
-    * [title_and_abstract_screening](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/title_and_abstract_screening):
-    * [fulltext_screening](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/fulltext_screening):
-    * [data_extraction](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/data_extraction):
-- [data](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data):
-- [figures](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/figures): contains all figures generated by [006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r) and included in the main text and the supplementary materials (except Figure 1 from the main text).
+    * [title_and_abstract_screening](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/title_and_abstract_screening): containing the [list of unique reference list with title-and-abstract decisions](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/title_and_abstract_screening/title-and-abstract_decisions_rayyan_studyID.csv)
+    * [fulltext_screening](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/fulltext_screening): containing all files generated by [003_data_extraction.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/003_data_extraction.R) as well as the [final list of references with all the full-text screening decisions](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/literature_review/fulltext_screening/Final_fulltext_screening_responses_including_conflict_resolution_google_form_data.xlsx)
+    * [data_extraction](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/data_extraction): containing all files generated by [003_data_extraction.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/003_data_extraction.R)
+
+- [data](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data): contains all data files necessary for the following three scripts: [004_dataset_cleaning.R](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/004_dataset_cleaning.R), [005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r) and [006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r)
+
+- [figures](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/figures): contains all figures generated by [006_figures.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/006_figures.r) and included in the main text and the supplementary materials (except Figure 1 from the main text)
