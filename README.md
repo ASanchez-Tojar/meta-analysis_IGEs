@@ -53,7 +53,7 @@ Scripts:
 -	[004_dataset_cleaning.R ](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/004_dataset_cleaning.R): used to clean the meta-analytic dataset and generate the version for the analyses that is imported by [005_data_analysis.r](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/005_data_analysis.r).
   
     * Input:
-      - Four datasets with the full data extraction of each of the 4 observers. The four files are .csv and their name starts with '*Data from papers*'. All available [here]([https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/literature_review/data_extraction](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data))
+      - Four datasets with the full data extraction of each of the 4 observers. The four files are .csv and their name starts with '*Data from papers*'. All available [here](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/tree/main/data))
       - [Final list of studies included after full-text screening and using animal models](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/animal_model_papers_to_be_assigned_full.csv)
       - [List of references created by this script before contacting authors, edited outside R, and imported back to be filled after having contacted the authors](https://github.com/ASanchez-Tojar/meta-analysis_IGEs/blob/main/data/fulldataset.csv)
     
