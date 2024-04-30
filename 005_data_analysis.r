@@ -7,7 +7,7 @@
 # Email: alfredo.tojar@gmail.com
 
 # David Fisher
-# www.evoetholab.co.uk
+# Profile: https://evoetholab.com/
 # University of Aberdeen
 # Email: david.fisher@abdn.ac.uk
 
@@ -15,7 +15,7 @@
 # Description of script and Instructions####
 ################################################################################
 
-# Script first created the 10th of November 2021 (ooooops!)
+# Script first created the 10th of November 2021
 
 # This script is to run a meta-analysis on Indirect Genetic
 # Effects across species.
@@ -174,7 +174,7 @@ rm(list=ls())
 
 # function to convert r (ICC) to Zr
 # Here, r correspond to our variance standardized variance estimates and the
-# correlations!
+# correlations
 r.to.Zr <- function(r){
   Zr <- round(0.5*(log(1+r)-log(1-r)),3)
 }
@@ -213,7 +213,7 @@ dataset.IGE <- as.data.frame(dataset.IGE
 nrow(dataset.IGE)
 length(unique(dataset.IGE$Paper_id))
 
-# DF: include only traits that are Gaussian (this excludes 10 rows only)
+# Include only traits that are Gaussian (this excludes 10 rows only)
 dataset.IGE <- as.data.frame(dataset.IGE 
                              %>% filter(Trait_error_distrib == "gaussian"))
 
@@ -349,11 +349,9 @@ load("data/phylo_cor.Rdata") #phylo_cor
 # some further data exploration and calculation
 ################################################################################
 
-### IMPORTANT NOTE: we decided not to rely on back-calculating VPs and instead
-# to contact all the authors who didn't provide VP
+### IMPORTANT NOTE: we decided to contact all the authors who didn't provide VP
 
-# DF: update to this, summing all variance components seems unreliable BUT
-# doing Va / H2 seems a pretty good way of getting VP
+# Additionally, calculating VP as Va / H2 seemed quite effective
 # We add the calculation of VP up here so that the new VPs can be used to help
 # fill in any missing Social H2s
 
@@ -362,13 +360,10 @@ load("data/phylo_cor.Rdata") #phylo_cor
 dataset.IGE$Total_v_phen_calc <- dataset.IGE$Va / dataset.IGE$H2
 
 with(dataset.IGE, plot(Total_v_phen2, Total_v_phen_calc))
-abline(a = 0, b = 1) # only 3 values look dodgy
+abline(a = 0, b = 1) 
 sum(is.na(dataset.IGE$Total_v_phen2))
 
-# way off 1:1 line but rank order is close to being correct
-# rest good
-
-# we only use the VO calculated value if the authors did not provide the value 
+# we only use the VP calculated value if the authors did not provide the value 
 # otherwise
 
 dataset.IGE$Total_v_phen3 = ifelse(is.na(dataset.IGE$Total_v_phen2),
@@ -403,20 +398,19 @@ sum(is.na(dataset.IGE$Social_h2))
 # When Variance is standardized, Total_v_phen2 is always set to 1. Check:
 summary(dataset.IGE[dataset.IGE$Variance_standardized=="yes","Total_v_phen2"])
 
-# That means, we can proceed to estimate the ratio of variance explained by IGE
-# as
+# That means, we can proceed to estimate the ratio of variance explained by IGE as
 dataset.IGE$Social_h2_calc <- dataset.IGE$V_ige/dataset.IGE$Total_v_phen3
 
 with(dataset.IGE, plot(Social_h2, Social_h2_calc, ylim=c(0,0.15)))
-abline(0,1) # tidy!
+abline(0,1) 
 
-# DF: Use social H2 if the authors reported it, or calculate it ourselves if they
+# Use social H2 if the authors reported it, or calculate it ourselves if they
 # did not
 dataset.IGE$Social_h2_2 <- ifelse(is.na(dataset.IGE$Social_h2), 
                                   dataset.IGE$Social_h2_calc,
                                   dataset.IGE$Social_h2)
 
-hist(dataset.IGE$Social_h2_2) # None over 1. All good!
+hist(dataset.IGE$Social_h2_2) # None over 1.
 
 ################################################################################
 # 1.	B) Are there differences between: (i.e. moderators for the meta-analysis  
@@ -465,13 +459,12 @@ dataset.IGE$H2_calc <- dataset.IGE$Va/dataset.IGE$Total_v_phen3
 with(dataset.IGE, plot(H2, H2_calc))
 abline(0,1) # most squarely on the line, but some variation around that
 
-# DF: use  H2 if the authors reported it, or calculate it ourselves if they did
-# not
+# Use  H2 if the authors reported it, or calculate it ourselves if they did not
 dataset.IGE$H2_2 <- ifelse(is.na(dataset.IGE$H2), 
                            dataset.IGE$H2_calc,
                            dataset.IGE$H2)
 
-hist(dataset.IGE$H2_2) # None over 1. All good!
+hist(dataset.IGE$H2_2) # None over 1. 
 
 
 ################################################################################
@@ -491,7 +484,7 @@ hist(dataset.IGE$H2_2) # None over 1. All good!
 # contrary to the (genetic) correlations, is unbounded and normally distributed
 # (though keep in mind that Social_h2.calculated can only be positive [0,1])
 
-# quick check: #DF: No effect sizes larger than 1
+# quick check: No effect sizes larger than 1
 dataset.IGE[dataset.IGE$Social_h2_2>1 & 
               !(is.na(dataset.IGE$Social_h2_2)), ]
 
@@ -588,7 +581,7 @@ diag(subset1A_VCV_ESVar) <- dataset.IGE.subset1A[,"VZr"]
 
 # Raw data funnel plot 
 
-# # DF: no more outliers after removing non-Gaussian traits and using parameters 
+# # No more outliers after removing non-Gaussian traits and using parameters 
 # # if they are reported and calculating them if not 
 # par(mfrow=c(1, 2))
 # funnel(dataset.IGE.subset1A$Social_h2_2_Zr, 
@@ -661,11 +654,11 @@ predict(meta.model.IGE.subset1A, digits=3)
 # abline(h = 2)
 # 
 # dataset.IGE.subset1A[resid$z > 2,]
-# #DF: a chicken paper provides most of these estimatess and can't see anything 
+# #A chicken paper provides most of these estimates and can't see anything 
 # obviously suspicious. We used the VP they reported rather than calculating it 
 # ourselves (although did use the social H2 we calculated) probably just higher 
-# values in that context i.e. feather pecking other value is a gull laying date 
-# paper - nothing obviously wrong
+# values in that context i.e. feather pecking 
+# other value is a gull laying date paper - nothing obviously wrong
 
 
 # using pluralistic approach to explore heterogeneity (Yang et al. 2023)
@@ -926,7 +919,7 @@ IGEmeta.regression.TraitCat.NI <- rma.mv(Social_h2_2_Zr,
                                          method = "REML", 
                                          test = "t", 
                                          data = dataset.IGE.subset1A, 
-                                         control=list(rel.tol=1e-9)) # to allow true convergence, details explained in https://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv
+                                         control=list(rel.tol=1e-9)) 
 
 print(IGEmeta.regression.TraitCat.NI, digits=3)
 
@@ -1164,7 +1157,8 @@ print(IGEmeta.regression.PopType.NI, digits=3)
 # Livestock # exploratory analyses after seeing the results
 
 # unique(dataset.IGE.subset1A$Species_name.2) #of these, 
-# #Neovison vison (farmed mink), Sus scrofa (pig), Bos taurus (cattle), and Gallus gallus (chicken), are def  livestock (are Oryctolagus cuniculus (hare) too? Not including for now) 
+# #Neovison vison (farmed mink), Sus scrofa (pig), Bos taurus (cattle), and Gallus gallus (chicken), are  livestock 
+# Could consider  Oryctolagus cuniculus (hare) livestock in this context, but not including for now) 
 
 dataset.IGE.subset1A$Livestock = factor(ifelse(dataset.IGE.subset1A$Species_name.2 %in% 
                                                  c("Neovison vison",
@@ -1805,20 +1799,10 @@ print(meta.model.IGE.subset3B.NI, digits=3)
 
 # For evolvability #
 
-# calculating evolvability can be done i.e. by
-# 1. calculating evolvability. Two ways: 
-#     - CVa, where CVa = (sqrt(Va)/Trait_mean))
-#     - CViges, where CViges = (sqrt(V_ige)/Trait_mean))
-
-# 2. mean standardized variances:
 #     - Ia, where Ia = Va/(Trait_mean^2)
 #     - Iiges, where Iiges = V_ige/(Trait_mean^2)
 
-# We discussed this and are going with no. 2, the interpretation of this is 
-# better
-
-# some comments to keep in mind
-# # to calculate evolvability
+# some comments to keep in mind, to calculate evolvability
 # raw variance divided by the mean^2 whenever Mean_standardized==no, and if yes
 # then the variance as reported
 
@@ -1829,7 +1813,6 @@ nrow(dataset.IGE[dataset.IGE$Variance_standardized == "no" &
 
 dataset.IGE$I_a <- ifelse(dataset.IGE$Variance_standardized == "no" & 
                             dataset.IGE$Trait_mean2 > 0.001 & # this excludes a very small value (0.00074) and 3 negative means that lead to a very skewed distribution otherwise. Whether to include these four or not lead to similar qualitative results, but the estimates seem more reliable when these four values are not included
-                            #abs(dataset.IGE$Trait_mean2) > 0.001 & # this excludes a very small value (0.00074) that leads to a very skewed distribution otherwise. Whether to include it or not leads to similar qualitative results, but the estimates seem more reliable when this value is not included
                             !(is.na(dataset.IGE$Trait_mean2)),
                           dataset.IGE$Va / (dataset.IGE$Trait_mean2^2 ),
                           NA )
@@ -1837,14 +1820,13 @@ dataset.IGE$I_a <- ifelse(dataset.IGE$Variance_standardized == "no" &
 
 dataset.IGE$I_ige = ifelse(dataset.IGE$Variance_standardized == "no" & 
                              dataset.IGE$Trait_mean2 > 0.001 & # this excludes a very small value (0.00074) and 3 negative means that lead to a very skewed distribution otherwise. Whether to include these four or not lead to similar qualitative results, but the estimates seem more reliable when these four values are not included
-                             #abs(dataset.IGE$Trait_mean2) > 0.001 & # this excludes a very small value (0.00074) that leads to a very skewed distribution otherwise. Whether to include it or not leads to similar qualitative results, but the estimates seem more reliable when this value is not included
-                             !(is.na(dataset.IGE$Trait_mean2)),
+                            !(is.na(dataset.IGE$Trait_mean2)),
                            dataset.IGE$V_ige / (dataset.IGE$Trait_mean2^2 ),
                            NA )
 
 par(mfrow=c(1,2))
 hist(dataset.IGE$I_a,breaks=40)
-# DF: range from 0-4, big values are a fish paper but they don't seem wacky
+# Large values are a fish paper but they don't seem wacky
 # just small means, so not removing them
 hist(dataset.IGE$I_ige,breaks=40)
 #range from 0-0.2
@@ -1978,8 +1960,7 @@ meta.model.IGE.subset3C.NI <- rma.mv(dat3C_I,
                                      method = "REML", 
                                      test = "t", 
                                      data = dataset.IGE.subset3C_long,
-                                     control=list(optimizer="nlminb", rel.tol=1e-8)) # to allow true convergence, details explained in https://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv
-
+                                     control=list(optimizer="nlminb", rel.tol=1e-8)) 
 
 # Printing the summary results of the model
 print(meta.model.IGE.subset3C.NI, digits=3)
@@ -1989,514 +1970,9 @@ print(meta.model.IGE.subset3C.NI, digits=3)
 ################################################################################
 # Q4: Do IGEs typically alter evolutionary trajectories?
 
-# We can get at this by calculating T2 which includes IGEs and their covariance 
+# We  get at this by calculating T2 which includes IGEs and their covariance 
 # with DGEs (and group size) and comparing to H2, see if it is larger or smaller
-# We can also look at the DGE-IGE correlation and see the overall direction
-
-################################################################################
-# 4B: Total heritability (T2) vs narrow-sense heritability (h2)
-
-sum(!(is.na(dataset.IGE$V_tbv))) #97 effect sizes presented
-
-hist(dataset.IGE$V_tbv) # wild range
-hist(dataset.IGE$V_tbv/dataset.IGE$Total_v_phen3) # this is T2, its better, ranges from 0 to 5
-
-# Calculate Vtbv:
-dataset.IGE$V_tbv_calc <- dataset.IGE$Va + 
-  dataset.IGE$Cov_a_ige*2*(dataset.IGE$Mean_group_size-1) + 
-  dataset.IGE$V_ige*((dataset.IGE$Mean_group_size-1)^2)
-
-# Calculate Vtbv but using using the transform V_ige 0 values (see above):
-# substituting all those values for their corresponding minimum value
-dataset.IGE$V_ige_2 <- ifelse((dataset.IGE$Paper_id %in% 
-                                 c("IGE0501","IGE0468","IGE0406")) & dataset.IGE$V_ige==0,
-                              0.0001,
-                              ifelse((dataset.IGE$Paper_id %in% 
-                                        c("IGE0857")) & dataset.IGE$V_ige==0,
-                                     0.001,ifelse((dataset.IGE$Paper_id %in% 
-                                                     c("IGE0203")) & dataset.IGE$V_ige==0,
-                                                  0.1,
-                                                  dataset.IGE$V_ige)
-                              ))
-
-
-dataset.IGE$V_tbv_calc_2 <- dataset.IGE$Va + 
-  dataset.IGE$Cov_a_ige*2*(dataset.IGE$Mean_group_size-1) + 
-  dataset.IGE$V_ige_2*((dataset.IGE$Mean_group_size-1)^2)
-
-par(mfrow=c(1,2))
-
-with(dataset.IGE, plot(V_tbv, V_tbv_calc, xlim=c(0,8000),ylim=c(0,8000)))
-abline(a = 0, b = 1) # pretty good correlation -> reliable
-
-with(dataset.IGE, plot(V_tbv, V_tbv_calc_2, xlim=c(0,8000),ylim=c(0,8000)))
-abline(a = 0, b = 1) # pretty good correlation -> reliable
-
-
-# from now on, we proceed using V_tbv_calc_2, which includes the extra values
-# reported as 0 and transformed to a minimum value by us
-dataset.IGE$V_tbv_2 <- ifelse(is.na(dataset.IGE$V_tbv), 
-                              dataset.IGE$V_tbv_calc_2,
-                              dataset.IGE$V_tbv)
-
-sum(!(is.na(dataset.IGE$V_tbv_2))) # 116 effect sizes now, so we manage to add 19 additional effect sizes
-
-hist(dataset.IGE$V_tbv_2)
-hist(dataset.IGE$V_tbv_2/dataset.IGE$Total_v_phen3) # better, ranges from 0 to 5
-
-max(dataset.IGE$T2, na.rm = T) #2.49
-
-sum(!(is.na(dataset.IGE$T2))) # 103 effect sizes
-
-nrow(dataset.IGE[complete.cases(dataset.IGE$T2,
-                                dataset.IGE$V_tbv),]) #85 rows with both
-
-dataset.IGE$T2_calc <- dataset.IGE$V_tbv_2 / dataset.IGE$Total_v_phen3 # DF:note both of these we calculated some of the values
-
-with(dataset.IGE, plot(T2, T2_calc))
-abline(0,1) # rather good correlation, only some more var between 0.1 and 0.5 -> reliable
-
-dataset.IGE$T2_2 <- ifelse(is.na(dataset.IGE$T2), 
-                           dataset.IGE$T2_calc,
-                           dataset.IGE$T2)
-
-sum(!(is.na(dataset.IGE$T2_2))) # 116 effect sizes now, so we manage to add 13 additional effect sizes
-max(dataset.IGE$T2_2, na.rm = T) # some large values: 2.49, 1.35, 2.22, 2.31, 1.29, 1.37
-
-with(dataset.IGE, plot(T2_2, H2_2, xlim = c(0,2.5), ylim = c(0,2.5)))
-abline(0,1)
-# T2 typically higher than h2, a lot of variation around line 
-
-dataset.IGE.subset4A <- as.data.frame(dataset.IGE 
-                                      %>% filter(!(is.na(T2_2)) &
-                                                   !(is.na(H2_2)) &
-                                                   !(is.na(VZr))))
-
-
-# some numbers and exploration
-nrow(dataset.IGE.subset4A)
-length(unique(dataset.IGE.subset4A$Paper_id))
-length(unique(dataset.IGE.subset4A$Species_name.2))
-summary(dataset.IGE.subset4A)
-# 110 effect sizes, 34 papers, 15 species
-
-hist(dataset.IGE.subset4A$Mean_group_size,breaks=50)
-summary(dataset.IGE.subset4A$Mean_group_size)
-
-
-dataset.IGE.subset4A_long <- dataset.IGE.subset4A %>%
-  pivot_longer(cols = c("H2_2", "T2_2"), 
-               values_to = "dat4A_herit", 
-               names_to = "direct_social") %>%
-  mutate(dat_weights = log(N_id_w_records)) %>% # for this analysis, we considered using the log of sample size as weights for the effect sizes but decided that using VZr, which is 1/(N-3) makes the results of all analyses more comparable to each other given that log(sample size) and 1/(N-3) are non-linearly associated
-  filter(is.finite(dat_weights)) %>% 
-  as.data.frame()
-
-hist(dataset.IGE.subset4A_long$dat4A_herit, breaks = 100)
-
-# given that the dataset is now "double" the size despite being the same data
-# we need to account for this new level of nonindependence. The easiest way at
-# this point is to continue using all random effects we used before, but add
-# an additional one to account for the within-study/residual variance, given 
-# that "Record_id" is no longer a unit-level random effect. Although we kept
-# the same names, we need to interpret the random effects slightly different
-# to what we did for the "non-long" models
-dataset.IGE.subset4A_long$Record_id_long <- 1:nrow(dataset.IGE.subset4A_long)
-
-
-nrow(dataset.IGE.subset4A_long) #double 110
-length(unique(dataset.IGE.subset4A_long$Paper_id))
-length(unique(dataset.IGE.subset4A_long$Species_name.2))
-# 220 effect sizes, 34 papers, 15 species
-
-subset4A_long_VCV_ESVar <- matrix(0, nrow=nrow(dataset.IGE.subset4A_long), 
-                                  ncol=nrow(dataset.IGE.subset4A_long))
-
-# Names rows and columns for each Record_id_long
-rownames(subset4A_long_VCV_ESVar) <- dataset.IGE.subset4A_long[,"Record_id_long"]
-colnames(subset4A_long_VCV_ESVar) <- dataset.IGE.subset4A_long[,"Record_id_long"]
-
-# Finds effect sizes that come from the same study
-shared_coord.subset4A_long <- which(dataset.IGE.subset4A_long[,"Paper_id"] %in% 
-                                      dataset.IGE.subset4A_long[
-                                        duplicated(dataset.IGE.subset4A_long[,"Paper_id"]), 
-                                        "Paper_id"]==TRUE)
-
-combinations.subset4A_long <- do.call("rbind", tapply(shared_coord.subset4A_long, 
-                                                      dataset.IGE.subset4A_long[
-                                                        shared_coord.subset4A_long, 
-                                                        "Paper_id"], 
-                                                      function(x) t(utils::combn(x, 
-                                                                                 2))))
-
-# Calculates the covariance between effect sizes and enters them in each 
-# combination of coordinates
-for (i in 1:dim(combinations.subset4A_long)[1]) {
-  p1 <- combinations.subset4A_long[i, 1]
-  p2 <- combinations.subset4A_long[i, 2]
-  p1_p2_cov <- 0.5*
-    sqrt(dataset.IGE.subset4A_long[p1, "VZr"])*
-    sqrt(dataset.IGE.subset4A_long[p2, "VZr"])
-  subset4A_long_VCV_ESVar[p1, p2] <- p1_p2_cov
-  subset4A_long_VCV_ESVar[p2, p1] <- p1_p2_cov
-} 
-
-# Enters previously calculated effect size sampling variances into diagonals 
-diag(subset4A_long_VCV_ESVar) <- dataset.IGE.subset4A_long[,"VZr"]
-
-# creating a copy of Species_name.2 for phylogenetic effect
-dataset.IGE.subset4A_long$Species_name.2.phylo <- dataset.IGE.subset4A_long$Species_name.2
-
-# saving the subset for script 006_figures.R
-write.csv(dataset.IGE.subset4A_long, file = "data/subsets/dataset_IGE_subset4A_long.csv",
-          row.names = F)
-
-phylo_cor.subset4A <- phylo_cor[rownames(phylo_cor) %in% 
-                                  unique(as.character(dataset.IGE.subset4A_long$Species_name.2)),
-                                colnames(phylo_cor) %in% 
-                                  unique(as.character(dataset.IGE.subset4A_long$Species_name.2))]
-
-meta.model.IGE.subset4A <- rma.mv(dat4A_herit,
-                                  subset4A_long_VCV_ESVar,
-                                  mods = ~ direct_social,
-                                  random = list(~ 1 | Paper_id,
-                                                ~ 1 | Group_id,
-                                                ~ 1 | Population2,
-                                                ~ 1 | Species_name.2,
-                                                ~ 1 | Species_name.2.phylo,
-                                                ~ 1 | Record_id_long,
-                                                ~ 1 | Record_id),
-                                  R = list(Species_name.2.phylo = phylo_cor.subset4A),
-                                  method = "REML", 
-                                  test = "t", 
-                                  data = dataset.IGE.subset4A_long)
-
-# saving the model for script 006_figures.R
-save(meta.model.IGE.subset4A, 
-     file = "data/models/IGEmeta_regression_h2_vs_Totalh2.Rdata")
-
-# model can be loaded instead of run using the following
-# load("data/models/IGEmeta_regression_h2_vs_Totalh2.Rdata")
-
-print(meta.model.IGE.subset4A, digits=3)
-
-
-# Calculate marginal R2 with r2_ml
-R2.IGE.subset4A <- r2_ml(meta.model.IGE.subset4A) 
-round(R2.IGE.subset4A*100, 1)
-
-
-# Run without intercept
-meta.model.IGE.subset4A.NI <- rma.mv(dat4A_herit,
-                                     subset4A_long_VCV_ESVar,
-                                     mods = ~ direct_social-1,
-                                     random = list(~ 1 | Paper_id,
-                                                   ~ 1 | Group_id,
-                                                   ~ 1 | Population2,
-                                                   ~ 1 | Species_name.2,
-                                                   ~ 1 | Species_name.2.phylo,
-                                                   ~ 1 | Record_id_long,
-                                                   ~ 1 | Record_id),
-                                     R = list(Species_name.2.phylo = phylo_cor.subset4A),
-                                     method = "REML", 
-                                     test = "t", 
-                                     data = dataset.IGE.subset4A_long)
-
-# Printing the summary results of the model
-print(meta.model.IGE.subset4A.NI, digits=3) 
-
-
-
-################################################################################
-# 4Bii - does this affect differ among trait categories?
-
-table(dataset.IGE.subset4A$Trait_category)
-table(dataset.IGE.subset4A_long$Trait_category)
-
-
-# creating a new variable to more easily explore the H2 and T2 differences per
-# trait
-dataset.IGE.subset4A_long$direct_social_Trait_category <- paste0(dataset.IGE.subset4A_long$direct_social,
-                                                                 sep="_",
-                                                                 dataset.IGE.subset4A_long$Trait_category)
-
-meta.model.IGE.subset4Aii <- rma.mv(dat4A_herit,
-                                    subset4A_long_VCV_ESVar,
-                                    mods = ~ direct_social_Trait_category,
-                                    random = list(~ 1 | Paper_id,
-                                                  ~ 1 | Group_id,
-                                                  ~ 1 | Population2,
-                                                  ~ 1 | Species_name.2,
-                                                  ~ 1 | Species_name.2.phylo,
-                                                  ~ 1 | Record_id_long,
-                                                  ~ 1 | Record_id),
-                                    R = list(Species_name.2.phylo = phylo_cor.subset4A),
-                                    method = "REML", 
-                                    test = "t", 
-                                    data = dataset.IGE.subset4A_long,
-                                    control=list(optimizer="nlminb", rel.tol=1e-8)) # to allow true convergence, details explained in https://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv
-
-# Printing the summary results of the model
-print(meta.model.IGE.subset4Aii, digits=3)
-
-# Calculate marginal R2 with r2_ml
-R2.IGE.subset4Aii <- r2_ml(meta.model.IGE.subset4Aii) 
-round(R2.IGE.subset4Aii*100, 1)
-
-
-# #Compare AIC?
-# AIC(meta.model.IGE.subset4A, meta.model.IGE.subset4Aii)
-# #with trait category much higher, delta = 2301.6, so without is better
-
-meta.model.IGE.subset4Aii.NI <- rma.mv(dat4A_herit,
-                                       subset4A_long_VCV_ESVar,
-                                       mods = ~ direct_social_Trait_category-1,
-                                       random = list(~ 1 | Paper_id,
-                                                     ~ 1 | Group_id,
-                                                     ~ 1 | Population2,
-                                                     ~ 1 | Species_name.2,
-                                                     ~ 1 | Species_name.2.phylo,
-                                                     ~ 1 | Record_id_long,
-                                                     ~ 1 | Record_id),
-                                       R = list(Species_name.2.phylo = phylo_cor.subset4A),
-                                       method = "REML", 
-                                       test = "t", 
-                                       data = dataset.IGE.subset4A_long,
-                                       control=list(optimizer="nlminb", rel.tol=1e-8)) # to allow true convergence, details explained in https://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv
-
-
-# Printing the summary results of the model
-print(meta.model.IGE.subset4Aii.NI, digits=3)
-
-
-# Post-hoc Wald tests to test for statistically significant differences between 
-# all levels
-
-# Need to discuss with co-authors what exactly we want to test here but here are
-# some code lines showing how to test for comparisons between traits for each 
-# variable (H2 or T2). It could be adjusted to compare each trait between the
-# variables (H2 vs T2), which is likely more what we may want to do?
-
-# KEEP IN MIND THAT THIS EXAMPLE CODE WAS DONE USING THE LEVEL
-# "development & metabolism & physiology" which we have decided to keep split
-# into "development" and "metabolism & physiology", so the code has to be
-# adjusted accordingly once we decide what comparisons we are interested in
-
-# # that is, the code for these comparisons is going to fail unless adjusted!
-# 
-# # H2
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,1,-1,0,0,0,0,0,0,0))) # development & metabolism & physiology vs. morphology
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,1,0,-1,0,0,0,0,0,0))) # development & metabolism & physiology vs. reproduction
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,1,0,0,-1,0,0,0,0,0))) # development & metabolism & physiology vs. survival
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,1,-1,0,0,0,0,0,0))) # morphology vs. reproduction
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,1,0,-1,0,0,0,0,0))) # morphology vs. survival
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,1,-1,0,0,0,0,0))) # reproduction vs. survival
-# 
-# 
-# #T2
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,1,-1,0,0,0))) # behaviour vs. development & metabolism & physiology
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,1,0,-1,0,0))) # behaviour vs. morphology
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,1,0,0,-1,0))) # behaviour vs. reproduction
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,1,0,0,0,-1))) # behaviour vs. survival
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,0,1,-1,0,0))) # development & metabolism & physiology vs. morphology
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,0,1,0,-1,0))) # development & metabolism & physiology vs. reproduction
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,0,1,0,0,-1))) # development & metabolism & physiology vs. survival
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,0,0,1,-1,0))) # morphology vs. reproduction
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,0,0,1,0,-1))) # morphology vs. survival
-# car::linearHypothesis(meta.model.IGE.subset4Aii.NI, rbind(c(0,0,0,0,0,0,0,0,1,-1))) # reproduction vs. survival
-
-
-
-################################################################################
-# 4Biii - what contributes more to the big increase of T2, covariance or IGE 
-# variance? -> T2 is Va + 2(n-1)Cov + (n-1)^2*Vige
-
-with(dataset.IGE.subset4A, plot(Cov_a_ige*2*(Mean_group_size-1),
-                                V_ige_2*((Mean_group_size-1)^2)))
-abline(a = 0, b = 1) #above the line means the 2nd term is larger
-# pretty much all above the line
-
-# Limit to see most of data better
-with(dataset.IGE.subset4A, plot(Cov_a_ige*2*(Mean_group_size-1),
-                                V_ige_2*((Mean_group_size-1)^2), 
-                                xlim = c(-10, 1500),
-                                ylim=c(0, 4000)))
-abline(a = 0, b = 1)
-# few below the line
-
-# Limit further to see most of data better
-with(dataset.IGE.subset4A, plot(Cov_a_ige*2*(Mean_group_size-1),
-                                V_ige_2*((Mean_group_size-1)^2), 
-                                xlim = c(-10, 15),
-                                ylim=c(0, 10)))
-abline(a = 0, b = 1)
-# few below the line
-
-summary(dataset.IGE.subset4A$Cov_a_ige)
-summary((dataset.IGE.subset4A$V_ige_2*((dataset.IGE.subset4A$Mean_group_size-1)^2)))
-correlation=(dataset.IGE.subset4A$Cov_a_ige*2*(dataset.IGE.subset4A$Mean_group_size-1))
-summary(correlation)
-group.size=(dataset.IGE.subset4A$V_ige_2*((dataset.IGE.subset4A$Mean_group_size-1)^2))
-summary(group.size)
-aa= group.size>correlation
-median(group.size-correlation, na.rm=TRUE)
-median(group.size, na.rm=TRUE)-mean(correlation, na.rm=TRUE)
-
-table(aa)
-(57*100)/78
-
-
-################################################################################
-# 4Biv: "response to direct selection and unrelated individuals" vs narrow-sense heritability (h2)
-
-#we want to calculate Va + [n-1]*Cov_DI
-dataset.IGE$RDSUR=dataset.IGE$Va + ((dataset.IGE$Mean_group_size-1)*dataset.IGE$Cov_a_ige)
-summary(dataset.IGE$RDSUR)
-
-sum(!(is.na(dataset.IGE$RDSUR))) #92 effect sizes presented
-
-hist(dataset.IGE$RDSUR) # wild range
-hist(dataset.IGE$RDSUR/dataset.IGE$Total_v_phen3) # this is T2, its better, ranges from 0 to 5
-
-with(dataset.IGE, plot(V_tbv, RDSUR, xlim=c(0,8000),ylim=c(0,8000)))
-abline(a = 0, b = 1) # pretty good correlation
-
-dataset.IGE$T2_new <- dataset.IGE$RDSUR / dataset.IGE$Total_v_phen3 # DF:note both of these we calculated some of the values
-
-with(dataset.IGE, plot(T2, T2_new))
-abline(0,1) # rather good correlation, only some more var between 0.1 and 0.5 -> reliable
-
-sum(!(is.na(dataset.IGE$T2_new))) # 79 effect sizes now, so we manage to add 13 additional effect sizes
-max(dataset.IGE$T2_new, na.rm = T) # some large values: 2.49, 1.35, 2.22, 2.31, 1.29, 1.37
-
-with(dataset.IGE, plot(T2_new, H2_2, xlim = c(0,2.5), ylim = c(0,2.5)))
-abline(0,1)
-# T2 typically higher than h2, a lot of variation around line 
-
-dataset.IGE.subset4ARD <- as.data.frame(dataset.IGE 
-                                        %>% filter(!(is.na(T2_new)) &
-                                                     !(is.na(H2_2)) &
-                                                     !(is.na(VZr))))
-
-# some numbers and exploration
-nrow(dataset.IGE.subset4ARD)
-length(unique(dataset.IGE.subset4ARD$Paper_id))
-length(unique(dataset.IGE.subset4ARD$Species_name.2))
-summary(dataset.IGE.subset4ARD)
-# 78 effect sizes, 24 papers, 12 species
-
-hist(dataset.IGE.subset4ARD$Mean_group_size,breaks=50)
-summary(dataset.IGE.subset4ARD$Mean_group_size)
-
-dataset.IGE.subset4ARD_long <- dataset.IGE.subset4ARD %>%
-  pivot_longer(cols = c("H2_2", "T2_new"), 
-               values_to = "dat4A_herit", 
-               names_to = "direct_social") %>%
-  mutate(dat_weights = log(N_id_w_records)) %>% # for this analysis, we considered using the log of sample size as weights for the effect sizes but decided that using VZr, which is 1/(N-3) makes the results of all analyses more comparable to each other given that log(sample size) and 1/(N-3) are non-linearly associated
-  filter(is.finite(dat_weights)) %>% 
-  as.data.frame()
-
-hist(dataset.IGE.subset4ARD_long$dat4A_herit, breaks = 100)
-
-# given that the dataset is now "double" the size despite being the same data
-# we need to account for this new level of nonindependence. The easiest way at
-# this point is to continue using all random effects we used before, but add
-# an additional one to account for the within-study/residual variance, given 
-# that "Record_id" is no longer a unit-level random effect. Although we kept
-# the same names, we need to interpret the random effects slightly different
-# to what we did for the "non-long" models
-dataset.IGE.subset4ARD_long$Record_id_long <- 1:nrow(dataset.IGE.subset4ARD_long)
-
-nrow(dataset.IGE.subset4ARD_long) #double 156
-length(unique(dataset.IGE.subset4ARD_long$Paper_id))
-length(unique(dataset.IGE.subset4ARD_long$Species_name.2))
-# 156 effect sizes, 24 papers, 12 species
-
-subset4ARD_long_VCV_ESVar <- matrix(0, nrow=nrow(dataset.IGE.subset4ARD_long), 
-                                    ncol=nrow(dataset.IGE.subset4ARD_long))
-
-# Names rows and columns for each Record_id_long
-rownames(subset4ARD_long_VCV_ESVar) <- dataset.IGE.subset4ARD_long[,"Record_id_long"]
-colnames(subset4ARD_long_VCV_ESVar) <- dataset.IGE.subset4ARD_long[,"Record_id_long"]
-
-# Finds effect sizes that come from the same study
-shared_coord.subset4ARD_long <- which(dataset.IGE.subset4ARD_long[,"Paper_id"] %in% 
-                                        dataset.IGE.subset4ARD_long[
-                                          duplicated(dataset.IGE.subset4ARD_long[,"Paper_id"]), 
-                                          "Paper_id"]==TRUE)
-
-combinations.subset4ARD_long <- do.call("rbind", tapply(shared_coord.subset4ARD_long, 
-                                                        dataset.IGE.subset4ARD_long[
-                                                          shared_coord.subset4ARD_long, 
-                                                          "Paper_id"], 
-                                                        function(x) t(utils::combn(x, 
-                                                                                   2))))
-
-# Calculates the covariance between effect sizes and enters them in each 
-# combination of coordinates
-for (i in 1:dim(combinations.subset4ARD_long)[1]) {
-  p1 <- combinations.subset4ARD_long[i, 1]
-  p2 <- combinations.subset4ARD_long[i, 2]
-  p1_p2_cov <- 0.5*
-    sqrt(dataset.IGE.subset4ARD_long[p1, "VZr"])*
-    sqrt(dataset.IGE.subset4ARD_long[p2, "VZr"])
-  subset4ARD_long_VCV_ESVar[p1, p2] <- p1_p2_cov
-  subset4ARD_long_VCV_ESVar[p2, p1] <- p1_p2_cov
-} 
-
-# Enters previously calculated effect size sampling variances into diagonals 
-diag(subset4ARD_long_VCV_ESVar) <- dataset.IGE.subset4ARD_long[,"VZr"]
-
-# creating a copy of Species_name.2 for phylogenetic effect
-dataset.IGE.subset4ARD_long$Species_name.2.phylo <- dataset.IGE.subset4ARD_long$Species_name.2
-
-phylo_cor.subset4ARD <- phylo_cor[rownames(phylo_cor) %in% 
-                                    unique(as.character(dataset.IGE.subset4ARD_long$Species_name.2)),
-                                  colnames(phylo_cor) %in% 
-                                    unique(as.character(dataset.IGE.subset4ARD_long$Species_name.2))]
-
-meta.model.IGE.subset4ARD <- rma.mv(dat4A_herit,
-                                    subset4ARD_long_VCV_ESVar,
-                                    mods = ~ direct_social,
-                                    random = list(~ 1 | Paper_id,
-                                                  ~ 1 | Group_id,
-                                                  ~ 1 | Population2,
-                                                  ~ 1 | Species_name.2,
-                                                  ~ 1 | Species_name.2.phylo,
-                                                  ~ 1 | Record_id_long,
-                                                  ~ 1 | Record_id),
-                                    R = list(Species_name.2.phylo = phylo_cor.subset4ARD),
-                                    method = "REML", 
-                                    test = "t", 
-                                    data = dataset.IGE.subset4ARD_long)
-
-print(meta.model.IGE.subset4ARD, digits=3)
-
-# Calculate marginal R2 with r2_ml
-R2.IGE.subset4AARD <- r2_ml(meta.model.IGE.subset4ARD) 
-round(R2.IGE.subset4AARD*100, 1)
-
-
-# Run without intercept
-meta.model.IGE.subset4ARD.NI <- rma.mv(dat4A_herit,
-                                       subset4ARD_long_VCV_ESVar,
-                                       mods = ~ direct_social-1,
-                                       random = list(~ 1 | Paper_id,
-                                                     ~ 1 | Group_id,
-                                                     ~ 1 | Population2,
-                                                     ~ 1 | Species_name.2,
-                                                     ~ 1 | Species_name.2.phylo,
-                                                     ~ 1 | Record_id_long,
-                                                     ~ 1 | Record_id),
-                                       R = list(Species_name.2.phylo = phylo_cor.subset4ARD),
-                                       method = "REML", 
-                                       test = "t", 
-                                       data = dataset.IGE.subset4ARD_long)
-
-# Printing the summary results of the model
-print(meta.model.IGE.subset4ARD.NI, digits=3) 
-
-
+# We also look at the DGE-IGE correlation and see the overall direction
 
 ################################################################################
 # 4A: What is the magnitude of the DGE-IGE correlation?
@@ -2511,8 +1987,6 @@ dataset.IGE$R_a_ige_calc <- dataset.IGE$Cov_a_ige / sqrt(dataset.IGE$Va*dataset.
 
 with(dataset.IGE, plot(R_a_ige,R_a_ige_calc))
 abline(0,1) 
-# DF: fascinated to know how these can diverge so much when the calculation is 
-# so standard and how values can range well beyond -1 and 1
 
 dataset.IGE$R_a_ige_2 <- ifelse(is.na(dataset.IGE$R_a_ige), 
                                 dataset.IGE$R_a_ige_calc,
@@ -2662,49 +2136,410 @@ ige_4b_res <- hux(predict(meta.model.IGE.subset4B, digits=3)) %>%
            after = 0)
 ige_4b_res
 
-# Result: IGEs may speed up evolution, with often positive correlations
+
+################################################################################
+# 4B: Total heritability (T2) vs narrow-sense heritability (h2)
+
+sum(!(is.na(dataset.IGE$V_tbv))) #97 effect sizes presented
+
+hist(dataset.IGE$V_tbv) # wild range
+hist(dataset.IGE$V_tbv/dataset.IGE$Total_v_phen3) # this is T2, its better, ranges from 0 to 5
+
+# Calculate Vtbv:
+dataset.IGE$V_tbv_calc <- dataset.IGE$Va + 
+  dataset.IGE$Cov_a_ige*2*(dataset.IGE$Mean_group_size-1) + 
+  dataset.IGE$V_ige*((dataset.IGE$Mean_group_size-1)^2)
+
+# Calculate Vtbv but using using the transform V_ige 0 values (see above):
+# substituting all those values for their corresponding minimum value
+dataset.IGE$V_ige_2 <- ifelse((dataset.IGE$Paper_id %in% 
+                                 c("IGE0501","IGE0468","IGE0406")) & dataset.IGE$V_ige==0,
+                              0.0001,
+                              ifelse((dataset.IGE$Paper_id %in% 
+                                        c("IGE0857")) & dataset.IGE$V_ige==0,
+                                     0.001,ifelse((dataset.IGE$Paper_id %in% 
+                                                     c("IGE0203")) & dataset.IGE$V_ige==0,
+                                                  0.1,
+                                                  dataset.IGE$V_ige)
+                              ))
+
+
+dataset.IGE$V_tbv_calc_2 <- dataset.IGE$Va + 
+  dataset.IGE$Cov_a_ige*2*(dataset.IGE$Mean_group_size-1) + 
+  dataset.IGE$V_ige_2*((dataset.IGE$Mean_group_size-1)^2)
+
+par(mfrow=c(1,2))
+
+with(dataset.IGE, plot(V_tbv, V_tbv_calc, xlim=c(0,8000),ylim=c(0,8000)))
+abline(a = 0, b = 1) # pretty good correlation -> reliable
+
+with(dataset.IGE, plot(V_tbv, V_tbv_calc_2, xlim=c(0,8000),ylim=c(0,8000)))
+abline(a = 0, b = 1) # pretty good correlation -> reliable
+
+
+# from now on, we proceed using V_tbv_calc_2, which includes the extra values
+# reported as 0 and transformed to a minimum value by us
+dataset.IGE$V_tbv_2 <- ifelse(is.na(dataset.IGE$V_tbv), 
+                              dataset.IGE$V_tbv_calc_2,
+                              dataset.IGE$V_tbv)
+
+sum(!(is.na(dataset.IGE$V_tbv_2))) # 116 effect sizes now, so we manage to add 19 additional effect sizes
+
+hist(dataset.IGE$V_tbv_2)
+hist(dataset.IGE$V_tbv_2/dataset.IGE$Total_v_phen3) # better, ranges from 0 to 5
+
+max(dataset.IGE$T2, na.rm = T) #2.49
+
+sum(!(is.na(dataset.IGE$T2))) # 103 effect sizes
+
+nrow(dataset.IGE[complete.cases(dataset.IGE$T2,
+                                dataset.IGE$V_tbv),]) #85 rows with both
+
+dataset.IGE$T2_calc <- dataset.IGE$V_tbv_2 / dataset.IGE$Total_v_phen3 
+
+with(dataset.IGE, plot(T2, T2_calc))
+abline(0,1) # rather good correlation, only some more var between 0.1 and 0.5 -> reliable
+
+dataset.IGE$T2_2 <- ifelse(is.na(dataset.IGE$T2), 
+                           dataset.IGE$T2_calc,
+                           dataset.IGE$T2)
+
+sum(!(is.na(dataset.IGE$T2_2))) # 116 effect sizes now, so we added 13 additional effect sizes
+max(dataset.IGE$T2_2, na.rm = T) # some large values: 2.49, 1.35, 2.22, 2.31, 1.29, 1.37
+
+with(dataset.IGE, plot(T2_2, H2_2, xlim = c(0,2.5), ylim = c(0,2.5)))
+abline(0,1)
+# T2 typically higher than h2, a lot of variation around line 
+
+dataset.IGE.subset4A <- as.data.frame(dataset.IGE 
+                                      %>% filter(!(is.na(T2_2)) &
+                                                   !(is.na(H2_2)) &
+                                                   !(is.na(VZr))))
+
+
+# some numbers and exploration
+nrow(dataset.IGE.subset4A)
+length(unique(dataset.IGE.subset4A$Paper_id))
+length(unique(dataset.IGE.subset4A$Species_name.2))
+summary(dataset.IGE.subset4A)
+# 110 effect sizes, 34 papers, 15 species
+
+hist(dataset.IGE.subset4A$Mean_group_size,breaks=50)
+summary(dataset.IGE.subset4A$Mean_group_size)
+
+
+dataset.IGE.subset4A_long <- dataset.IGE.subset4A %>%
+  pivot_longer(cols = c("H2_2", "T2_2"), 
+               values_to = "dat4A_herit", 
+               names_to = "direct_social") %>%
+  mutate(dat_weights = log(N_id_w_records)) %>% # for this analysis, we considered using the log of sample size as weights for the effect sizes but decided that using VZr, which is 1/(N-3) makes the results of all analyses more comparable to each other given that log(sample size) and 1/(N-3) are non-linearly associated
+  filter(is.finite(dat_weights)) %>% 
+  as.data.frame()
+
+hist(dataset.IGE.subset4A_long$dat4A_herit, breaks = 100)
+
+# given that the dataset is now "double" the size despite being the same data
+# we need to account for this new level of nonindependence. The easiest way at
+# this point is to continue using all random effects we used before, but add
+# an additional one to account for the within-study/residual variance, given 
+# that "Record_id" is no longer a unit-level random effect. Although we kept
+# the same names, we need to interpret the random effects slightly different
+# to what we did for the "non-long" models
+dataset.IGE.subset4A_long$Record_id_long <- 1:nrow(dataset.IGE.subset4A_long)
+
+
+nrow(dataset.IGE.subset4A_long) #double 110
+length(unique(dataset.IGE.subset4A_long$Paper_id))
+length(unique(dataset.IGE.subset4A_long$Species_name.2))
+# 220 effect sizes, 34 papers, 15 species
+
+subset4A_long_VCV_ESVar <- matrix(0, nrow=nrow(dataset.IGE.subset4A_long), 
+                                  ncol=nrow(dataset.IGE.subset4A_long))
+
+# Names rows and columns for each Record_id_long
+rownames(subset4A_long_VCV_ESVar) <- dataset.IGE.subset4A_long[,"Record_id_long"]
+colnames(subset4A_long_VCV_ESVar) <- dataset.IGE.subset4A_long[,"Record_id_long"]
+
+# Finds effect sizes that come from the same study
+shared_coord.subset4A_long <- which(dataset.IGE.subset4A_long[,"Paper_id"] %in% 
+                                      dataset.IGE.subset4A_long[
+                                        duplicated(dataset.IGE.subset4A_long[,"Paper_id"]), 
+                                        "Paper_id"]==TRUE)
+
+combinations.subset4A_long <- do.call("rbind", tapply(shared_coord.subset4A_long, 
+                                                      dataset.IGE.subset4A_long[
+                                                        shared_coord.subset4A_long, 
+                                                        "Paper_id"], 
+                                                      function(x) t(utils::combn(x, 
+                                                                                 2))))
+
+# Calculates the covariance between effect sizes and enters them in each 
+# combination of coordinates
+for (i in 1:dim(combinations.subset4A_long)[1]) {
+  p1 <- combinations.subset4A_long[i, 1]
+  p2 <- combinations.subset4A_long[i, 2]
+  p1_p2_cov <- 0.5*
+    sqrt(dataset.IGE.subset4A_long[p1, "VZr"])*
+    sqrt(dataset.IGE.subset4A_long[p2, "VZr"])
+  subset4A_long_VCV_ESVar[p1, p2] <- p1_p2_cov
+  subset4A_long_VCV_ESVar[p2, p1] <- p1_p2_cov
+} 
+
+# Enters previously calculated effect size sampling variances into diagonals 
+diag(subset4A_long_VCV_ESVar) <- dataset.IGE.subset4A_long[,"VZr"]
+
+# creating a copy of Species_name.2 for phylogenetic effect
+dataset.IGE.subset4A_long$Species_name.2.phylo <- dataset.IGE.subset4A_long$Species_name.2
+
+# saving the subset for script 006_figures.R
+write.csv(dataset.IGE.subset4A_long, file = "data/subsets/dataset_IGE_subset4A_long.csv",
+          row.names = F)
+
+phylo_cor.subset4A <- phylo_cor[rownames(phylo_cor) %in% 
+                                  unique(as.character(dataset.IGE.subset4A_long$Species_name.2)),
+                                colnames(phylo_cor) %in% 
+                                  unique(as.character(dataset.IGE.subset4A_long$Species_name.2))]
+
+meta.model.IGE.subset4A <- rma.mv(dat4A_herit,
+                                  subset4A_long_VCV_ESVar,
+                                  mods = ~ direct_social,
+                                  random = list(~ 1 | Paper_id,
+                                                ~ 1 | Group_id,
+                                                ~ 1 | Population2,
+                                                ~ 1 | Species_name.2,
+                                                ~ 1 | Species_name.2.phylo,
+                                                ~ 1 | Record_id_long,
+                                                ~ 1 | Record_id),
+                                  R = list(Species_name.2.phylo = phylo_cor.subset4A),
+                                  method = "REML", 
+                                  test = "t", 
+                                  data = dataset.IGE.subset4A_long)
+
+# saving the model for script 006_figures.R
+save(meta.model.IGE.subset4A, 
+     file = "data/models/IGEmeta_regression_h2_vs_Totalh2.Rdata")
+
+# model can be loaded instead of run using the following
+# load("data/models/IGEmeta_regression_h2_vs_Totalh2.Rdata")
+
+print(meta.model.IGE.subset4A, digits=3)
+
+
+# Calculate marginal R2 with r2_ml
+R2.IGE.subset4A <- r2_ml(meta.model.IGE.subset4A) 
+round(R2.IGE.subset4A*100, 1)
+
+
+# Run without intercept
+meta.model.IGE.subset4A.NI <- rma.mv(dat4A_herit,
+                                     subset4A_long_VCV_ESVar,
+                                     mods = ~ direct_social-1,
+                                     random = list(~ 1 | Paper_id,
+                                                   ~ 1 | Group_id,
+                                                   ~ 1 | Population2,
+                                                   ~ 1 | Species_name.2,
+                                                   ~ 1 | Species_name.2.phylo,
+                                                   ~ 1 | Record_id_long,
+                                                   ~ 1 | Record_id),
+                                     R = list(Species_name.2.phylo = phylo_cor.subset4A),
+                                     method = "REML", 
+                                     test = "t", 
+                                     data = dataset.IGE.subset4A_long)
+
+# Printing the summary results of the model
+print(meta.model.IGE.subset4A.NI, digits=3) 
 
 
 
 ################################################################################
-# 4bii - does DGE-IGE correlation vary among trait types?
+# 4Bii - what contributes more to the large increase of T2, covariance or IGE variance? 
+# T2 is Va + 2(n-1)Cov + (n-1)^2*Vige
 
-meta.model.IGE.subset4Bii <- rma.mv(R_a_ige_2_Zr,
-                                    subset4B_VCV_ESVar, 
-                                    mods = ~ Trait_category,
+with(dataset.IGE.subset4A, plot(Cov_a_ige*2*(Mean_group_size-1),
+                                V_ige_2*((Mean_group_size-1)^2)))
+abline(a = 0, b = 1) #above the line means the 2nd term is larger
+# pretty much all above the line
+
+# Limit to see most of data better
+with(dataset.IGE.subset4A, plot(Cov_a_ige*2*(Mean_group_size-1),
+                                V_ige_2*((Mean_group_size-1)^2), 
+                                xlim = c(-10, 1500),
+                                ylim=c(0, 4000)))
+abline(a = 0, b = 1)
+# few below the line
+
+# Limit further to see most of data better
+with(dataset.IGE.subset4A, plot(Cov_a_ige*2*(Mean_group_size-1),
+                                V_ige_2*((Mean_group_size-1)^2), 
+                                xlim = c(-10, 15),
+                                ylim=c(0, 10)))
+abline(a = 0, b = 1)
+# few below the line
+
+summary(dataset.IGE.subset4A$Cov_a_ige)
+summary((dataset.IGE.subset4A$V_ige_2*((dataset.IGE.subset4A$Mean_group_size-1)^2)))
+correlation=(dataset.IGE.subset4A$Cov_a_ige*2*(dataset.IGE.subset4A$Mean_group_size-1))
+summary(correlation)
+group.size=(dataset.IGE.subset4A$V_ige_2*((dataset.IGE.subset4A$Mean_group_size-1)^2))
+summary(group.size)
+aa= group.size>correlation
+median(group.size-correlation, na.rm=TRUE)
+median(group.size, na.rm=TRUE)-mean(correlation, na.rm=TRUE)
+
+table(aa)
+(57*100)/78
+
+
+################################################################################
+# 4Biii: "response to direct selection and unrelated individuals" vs narrow-sense heritability (h2)
+
+#we want to calculate Va + [n-1]*Cov_DI
+dataset.IGE$RDSUR=dataset.IGE$Va + ((dataset.IGE$Mean_group_size-1)*dataset.IGE$Cov_a_ige)
+summary(dataset.IGE$RDSUR)
+
+sum(!(is.na(dataset.IGE$RDSUR))) #92 effect sizes presented
+
+hist(dataset.IGE$RDSUR) # wide range
+hist(dataset.IGE$RDSUR/dataset.IGE$Total_v_phen3) # this is T2, its better, ranges from 0 to 5
+
+with(dataset.IGE, plot(V_tbv, RDSUR, xlim=c(0,8000),ylim=c(0,8000)))
+abline(a = 0, b = 1) # pretty good correlation
+
+dataset.IGE$T2_new <- dataset.IGE$RDSUR / dataset.IGE$Total_v_phen3 
+
+with(dataset.IGE, plot(T2, T2_new))
+abline(0,1) # rather good correlation, only some more var between 0.1 and 0.5 -> reliable
+
+sum(!(is.na(dataset.IGE$T2_new))) # 79 effect sizes now, so we added 13 additional effect sizes
+max(dataset.IGE$T2_new, na.rm = T) # some large values: 2.49, 1.35, 2.22, 2.31, 1.29, 1.37
+
+with(dataset.IGE, plot(T2_new, H2_2, xlim = c(0,2.5), ylim = c(0,2.5)))
+abline(0,1)
+# T2 typically higher than h2, a lot of variation around line 
+
+dataset.IGE.subset4ARD <- as.data.frame(dataset.IGE 
+                                        %>% filter(!(is.na(T2_new)) &
+                                                     !(is.na(H2_2)) &
+                                                     !(is.na(VZr))))
+
+# some numbers and exploration
+nrow(dataset.IGE.subset4ARD)
+length(unique(dataset.IGE.subset4ARD$Paper_id))
+length(unique(dataset.IGE.subset4ARD$Species_name.2))
+summary(dataset.IGE.subset4ARD)
+# 78 effect sizes, 24 papers, 12 species
+
+hist(dataset.IGE.subset4ARD$Mean_group_size,breaks=50)
+summary(dataset.IGE.subset4ARD$Mean_group_size)
+
+dataset.IGE.subset4ARD_long <- dataset.IGE.subset4ARD %>%
+  pivot_longer(cols = c("H2_2", "T2_new"), 
+               values_to = "dat4A_herit", 
+               names_to = "direct_social") %>%
+  mutate(dat_weights = log(N_id_w_records)) %>% # for this analysis, we considered using the log of sample size as weights for the effect sizes but decided that using VZr, which is 1/(N-3) makes the results of all analyses more comparable to each other given that log(sample size) and 1/(N-3) are non-linearly associated
+  filter(is.finite(dat_weights)) %>% 
+  as.data.frame()
+
+hist(dataset.IGE.subset4ARD_long$dat4A_herit, breaks = 100)
+
+# given that the dataset is now "double" the size despite being the same data
+# we need to account for this new level of nonindependence. The easiest way at
+# this point is to continue using all random effects we used before, but add
+# an additional one to account for the within-study/residual variance, given 
+# that "Record_id" is no longer a unit-level random effect. Although we kept
+# the same names, we need to interpret the random effects slightly different
+# to what we did for the "non-long" models
+dataset.IGE.subset4ARD_long$Record_id_long <- 1:nrow(dataset.IGE.subset4ARD_long)
+
+nrow(dataset.IGE.subset4ARD_long) #double 156
+length(unique(dataset.IGE.subset4ARD_long$Paper_id))
+length(unique(dataset.IGE.subset4ARD_long$Species_name.2))
+# 156 effect sizes, 24 papers, 12 species
+
+subset4ARD_long_VCV_ESVar <- matrix(0, nrow=nrow(dataset.IGE.subset4ARD_long), 
+                                    ncol=nrow(dataset.IGE.subset4ARD_long))
+
+# Names rows and columns for each Record_id_long
+rownames(subset4ARD_long_VCV_ESVar) <- dataset.IGE.subset4ARD_long[,"Record_id_long"]
+colnames(subset4ARD_long_VCV_ESVar) <- dataset.IGE.subset4ARD_long[,"Record_id_long"]
+
+# Finds effect sizes that come from the same study
+shared_coord.subset4ARD_long <- which(dataset.IGE.subset4ARD_long[,"Paper_id"] %in% 
+                                        dataset.IGE.subset4ARD_long[
+                                          duplicated(dataset.IGE.subset4ARD_long[,"Paper_id"]), 
+                                          "Paper_id"]==TRUE)
+
+combinations.subset4ARD_long <- do.call("rbind", tapply(shared_coord.subset4ARD_long, 
+                                                        dataset.IGE.subset4ARD_long[
+                                                          shared_coord.subset4ARD_long, 
+                                                          "Paper_id"], 
+                                                        function(x) t(utils::combn(x, 
+                                                                                   2))))
+
+# Calculates the covariance between effect sizes and enters them in each 
+# combination of coordinates
+for (i in 1:dim(combinations.subset4ARD_long)[1]) {
+  p1 <- combinations.subset4ARD_long[i, 1]
+  p2 <- combinations.subset4ARD_long[i, 2]
+  p1_p2_cov <- 0.5*
+    sqrt(dataset.IGE.subset4ARD_long[p1, "VZr"])*
+    sqrt(dataset.IGE.subset4ARD_long[p2, "VZr"])
+  subset4ARD_long_VCV_ESVar[p1, p2] <- p1_p2_cov
+  subset4ARD_long_VCV_ESVar[p2, p1] <- p1_p2_cov
+} 
+
+# Enters previously calculated effect size sampling variances into diagonals 
+diag(subset4ARD_long_VCV_ESVar) <- dataset.IGE.subset4ARD_long[,"VZr"]
+
+# creating a copy of Species_name.2 for phylogenetic effect
+dataset.IGE.subset4ARD_long$Species_name.2.phylo <- dataset.IGE.subset4ARD_long$Species_name.2
+
+phylo_cor.subset4ARD <- phylo_cor[rownames(phylo_cor) %in% 
+                                    unique(as.character(dataset.IGE.subset4ARD_long$Species_name.2)),
+                                  colnames(phylo_cor) %in% 
+                                    unique(as.character(dataset.IGE.subset4ARD_long$Species_name.2))]
+
+meta.model.IGE.subset4ARD <- rma.mv(dat4A_herit,
+                                    subset4ARD_long_VCV_ESVar,
+                                    mods = ~ direct_social,
                                     random = list(~ 1 | Paper_id,
                                                   ~ 1 | Group_id,
                                                   ~ 1 | Population2,
                                                   ~ 1 | Species_name.2,
                                                   ~ 1 | Species_name.2.phylo,
+                                                  ~ 1 | Record_id_long,
                                                   ~ 1 | Record_id),
-                                    R = list(Species_name.2.phylo = phylo_cor.subset4B),
+                                    R = list(Species_name.2.phylo = phylo_cor.subset4ARD),
                                     method = "REML", 
                                     test = "t", 
-                                    data = dataset.IGE.subset4B)
+                                    data = dataset.IGE.subset4ARD_long)
 
-summary(meta.model.IGE.subset4Bii)
+print(meta.model.IGE.subset4ARD, digits=3)
 
 # Calculate marginal R2 with r2_ml
-R2.IGE.subset4Bii <- r2_ml(meta.model.IGE.subset4Bii) 
-round(R2.IGE.subset4Bii*100, 1)
+R2.IGE.subset4AARD <- r2_ml(meta.model.IGE.subset4ARD) 
+round(R2.IGE.subset4AARD*100, 1)
 
-# Remove intercept
-meta.model.IGE.subset4Bii.NI <- rma.mv(R_a_ige_2_Zr,
-                                       subset4B_VCV_ESVar, 
-                                       mods = ~ Trait_category-1,
+
+# Run without intercept
+meta.model.IGE.subset4ARD.NI <- rma.mv(dat4A_herit,
+                                       subset4ARD_long_VCV_ESVar,
+                                       mods = ~ direct_social-1,
                                        random = list(~ 1 | Paper_id,
                                                      ~ 1 | Group_id,
                                                      ~ 1 | Population2,
                                                      ~ 1 | Species_name.2,
                                                      ~ 1 | Species_name.2.phylo,
+                                                     ~ 1 | Record_id_long,
                                                      ~ 1 | Record_id),
-                                       R = list(Species_name.2.phylo = phylo_cor.subset4B),
+                                       R = list(Species_name.2.phylo = phylo_cor.subset4ARD),
                                        method = "REML", 
                                        test = "t", 
-                                       data = dataset.IGE.subset4B)
+                                       data = dataset.IGE.subset4ARD_long)
 
-summary(meta.model.IGE.subset4Bii.NI)
+# Printing the summary results of the model
+print(meta.model.IGE.subset4ARD.NI, digits=3) 
+
 
 
 ################################################################################
