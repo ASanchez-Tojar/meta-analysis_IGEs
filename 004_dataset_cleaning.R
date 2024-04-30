@@ -21,8 +21,6 @@
 # Description of script and Instructions
 ##############################################################
 
-# Script first created on the XXXX 2020
-
 # This script is to import and clean the data collected for a systematic review
 # on indirect genetic effects conducted in Web of Science and
 # Scopus.
