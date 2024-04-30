@@ -5,10 +5,10 @@
 # Francesca Santostefano
 # Profile: https://www.researchgate.net/profile/Francesca-Santostefano
 # University du Quebec Montreal
-# Email: santostefano.francesca@courrier.uqam.ca
+# Email: F.Santostefano2@exeter.ac.uk
 #
 # David Fisher
-# Profile: 
+# Profile: https://evoetholab.com/
 # Univeristy of Aberdeen
 # Email: david.fisher@abdn.ac.uk
 #
@@ -21,6 +21,8 @@
 # Description of script and Instructions
 ##############################################################
 
+# Script first created on the XXXX 2020
+
 # This script is to import and clean the data collected for a systematic review
 # on indirect genetic effects conducted in Web of Science and
 # Scopus.
@@ -32,33 +34,24 @@
 #"Data from papers FS-Grid view_FS.csv"
 #"Data from papers MM-Grid view_FS.csv"
 
-#add versions of R/Rstudio etc? encoding?
-#we could use the package renv for version control
 
 ##############################################################
 
+# Packages needed 
 
-#####Set working directory, import libraries
+##############################################################
 
-# USING RELATIVE PATHS TO ALLOW FOR REPRODUCIBILITY
-#####delete the personal wd before publishing/sharing
-#setwd("C:/Users/Francesca/PostDoc/IGE meta/dataset organization")
-# setwd("C:/Users/ext_fsantostefano/Projects/UQAM/Data extraction")
-#setwd("../data/")
-
-##### Clear memory
-rm(list=ls())
-
-#####remove this before publication
-#load("dataset cleaning for coauthors.RData")
-
-#install.packages("pacman")
-
-##### easier way to call the packages (and install them, if neccessary, just need to have pacman installed before)
 pacman::p_load(data.table,stringr,ape,plyr,rotl,treebase,ggplot2)
 
+# cleaning up
+rm(list=ls())
 
-#reading the data
+##############################################################
+
+#Reading the data
+
+##############################################################
+
 dataTR <- fread("data/Data from papers-Grid view_FS.csv")
 dataAST <- fread("data/Data from papers AST-Grid view_FS.csv")
 dataDF <- fread("data/Data from papers DF-Grid view_FS.csv")
@@ -220,7 +213,7 @@ data$Taxon <- factor(data$Taxon)
 #we create a second column where we shorten and standardize the names by hand
 data$Population2 <-NA
 
-#I keep the location + the country code, when location not available, name of institute or breed, and country of first author affiliation
+#We give the location + the country code, or when location not available, name of institute or breed, and country of first author affiliation
 data$Population2 [data$Population == 'Capalbio, Italy' ]<- 'Capalbio_IT'
 data$Population2 [data$Population == 'White Mountain Research Station, California, US' ]<- 'WhiteMountain_US'
 data$Population2 [data$Population == 'Kluane Red Squirrel Project, Yukon, Canada' ]<- 'Kluane_CAN'
@@ -349,7 +342,7 @@ data$Study_type<-as.factor(data$Study_type)
 #st_fqp
 
 #Sex
-##### IGE0494 had NA. I had a check on the original paper and they indeed do not mention anything about sex, but I then think it is safe to assume that both sexes were analyzed together. Please, double-check that my decision is correct!!!!
+##### IGE0494 had NA. We checked the original paper and they indeed do not mention anything about sex, but we then think it is safe to assume that both sexes were analyzed together.
 data[data$Paper_id=="IGE0494","Sex"] <- "both"
 
 #convert as factor
@@ -442,7 +435,7 @@ data$Trait_name <-as.factor(data$Trait_name )
 #levels(data$Trait_name )
 
 #Trait_category
-##### we categorized cone hoard size as Trait_category == "other", but since there are only two data points like that, we won't be able to do much with that category. One could argue that we could categorize cone hoard size as "behaviour", and so I do below. Make sure you are happy with this, and get back to me if not
+##### we checked the two entries where the trait type was categorised as other, and both were hoarding behaviour in North American red squirrels, which was now classify as a behaviour as otherwise the category is not large enough to be useful
 data$Trait_category <- ifelse(data$Trait_category=="other",
                               "behaviour",
                               data$Trait_category)
@@ -508,7 +501,6 @@ data$Variance_standardized<-as.factor(data$Variance_standardized)
 #frequencies of Treatment_Group
 #I don't think we'll do anything with this, too heterogeneous/many levels and mostly NAs
 ##### we need to transform this variable into an ID for us to have the possibility to include it as a random effect
-##### one potential way of doing this is
 data$Group_id <- as.numeric(as.factor(paste(data$Paper_id,data$Treatment_group,sep="_")))
 # data$Treatment_group<-as.factor(data$Treatment_group)
 # sum(is.na(data$Treatment_group))
@@ -537,7 +529,7 @@ data$Other_fixed_eff<-as.factor(data$Other_fixed_eff)
 
 #Mean_group_size 
 data$Mean_group_size
-#record 28 to 30 "9-11" needs to be replaced (with mean, so 10) ##### are the NA's true NA's or we could figure out the mean group size somehow by re-reading the paper?
+#record 28 to 30 "9-11" needs to be replaced (with mean, so 10) 
 data$Mean_group_size[data$Paper_id == 'IGE0243'] <- "10"
 data$Mean_group_size<-as.numeric(data$Mean_group_size)
 #hist(data$Mean_group_size ,  breaks = 50)
@@ -555,7 +547,7 @@ data$Va<-gsub(',','',data$Va)
 
 #V_ige
 #data$V_ige
-#replace then only <0.001 value with 0.0001 to make it usable for the analyses ##### I think it is better to be conservative, that is way I went for 0.0001, that way we cannot so easily be criticized 
+#replace then only <0.001 value with 0.0001 to make it usable for the analyses
 data$V_ige[data$V_ige == "<0.001" ] <- "0.0001"
 #ok (huge range variation depending on whether it's std or not)
 #data$V_ige <-as.numeric(data$V_ige )
@@ -588,7 +580,7 @@ data$Vpe_soc<-as.numeric(data$Vpe_soc)
 ##### for those standardized, checking whether values are as expected (i.e. between 0 and 1?)
 #summary(data[data$Variance_standardized=="yes","Vpe_soc"]) ##### all as expected
 
-#other variances #will only really be used to add up to vp  ##### let's do the same for all V_other, particularly for checking whether they all look as expected when Variance_Standardized=="yes"? Otherwise, we may want to simply discard them from the final data set using data <- subset(data, select = -(V_other_1,V_other_2,V_other_3,V_other_4,V_other_5,V_other_6))
+#other variances will only really be used to add up to VP  
 #data$V_other_1
 #replace , with nothing because those "," were meant to represent the thousand limit in the original paper
 data$V_other_1<-gsub(',','',data$V_other_1)
@@ -671,10 +663,10 @@ data[data$Paper_id=="IGE1050","Social_h2"] <- 0.048
 #some reformatting of values
 data$R_a_ige<-as.numeric(data$R_a_ige)
 #hist(data$R_a_ige,  breaks = 50)
-#check whether record 202 and 192 is a typo, it should be between -1 and 1
-#record 192 is not a typo, decide if we drop it # sounds like we should exclude since it really should be between -1 and 1; although it seems that this value gets dropped anyway with the code assigning NA to those estimates for which V_ige == 0 (just below)
+#check whether records 202 and 192 are a typo, it should be between -1 and 1
+#record 192 is not a typo, however this value gets dropped anyway with the code assigning NA to those estimates for which V_ige == 0 (just below)
 #202 is a typo
-data[data$R_a_ige==-37.0000 & !(is.na(data$R_a_ige)), "R_a_ige"] <- -0.37 ##### value meant to be negative!!!!
+data[data$R_a_ige==-37.0000 & !(is.na(data$R_a_ige)), "R_a_ige"] <- -0.37 
 #also when variances are reported as 0, then the correlation should be set to undefined, so we replace those instances with NA
 sum(data$V_ige == 0, na.rm=T)
 data$R_a_ige [data$V_ige == 0]<- "NA"
@@ -684,7 +676,7 @@ data$R_a_ige<-as.numeric(data$R_a_ige)
 #R_pe_pe_soc
 data$R_pe_pe_soc
 #ok 
-#very few values, so we will not do anything with this  ##### there is also a value below -1 that we may want to double-check
+#very few values, so we will not do anything with this  
 #hist(data$R_pe_pe_soc,  breaks = 50)
 
 
@@ -718,9 +710,8 @@ data$V_tbv<-as.numeric(data$V_tbv)
 #hist(data$T2,  breaks = 50)
 
 #"Data_location"
-#just for us but no need to manipulate
 #data$Data_location
-##### not going crazy on it, but just adding some small changes to make it look a bit cleaner and more standardized
+##### just adding some small changes to make it look a bit cleaner and more standardized
 data$Data_location <- str_replace_all(data$Data_location, c("text" = "Text" ))
 data$Data_location <- str_replace_all(data$Data_location, c("page" = "pg" ))
 data$Data_location <- str_replace_all(data$Data_location, c("and" = "&" ))
@@ -744,7 +735,7 @@ data$Second_screener_id
 #for us to help data post processing, no need to manipulate, will use them one by one 
 data$Second_screener_notes
 
-##### I have excluded this studies at the beginning of the script to (1) one make coding easier for some particular case, (2) because I don't think we need to keep them for anything else at this point. We can discuss this if you prefer.
+##### I have excluded these studies at the beginning of the script to (1) one make coding easier for some particular case, (2) because I don't think we need to keep them for anything else at this point. 
 # #Excluded_during_data_extraction
 # #convert as factor
 # #where yes, remove from dataset? or keep for summary analyses of literature? for now we keep them
@@ -753,14 +744,14 @@ data$Second_screener_notes
 
 #Decision
 #this was for revision in extraction phase, no needed here 
-##### I think it is best to rename this variable to avoid confusion later on
+##### We rename this variable to avoid confusion later on
 data$Second_screener_original_decision <- data$Decision
 data <- subset(data,select =  -c(Decision))
 data$Second_screener_original_decision<-as.factor(data$Second_screener_original_decision)
 #levels(data$Second_screener_original_decision)
 
 #Changes_after_second_screening
-#this was for us to keep track of changes in extraction, no needed here 
+#this was for us to keep track of changes in extraction, not needed here 
 data$Changes_after_second_screening
 
 #Final_comments
@@ -774,8 +765,7 @@ data$Final_comments
 ######################################################################################################
 #data processing
 
-###we decided that we don't rely on back-calculating VPs 
-#and instead we need to contact all the authors who didn't provide VP.
+###we decided that we would rather contact all the authors who didn't provide VP than calculate ourselves, but in some cases calculating VP seems OK.
 
 #QUESTIONS OF THE PROJECT AND VARIABLES WE NEED TO ANSWER
 # 1.      A) What is the proportion of variance in traits explained by IGEs?
@@ -801,7 +791,7 @@ missingSocial_h2<-complete.cases(data[, "Social_h2"])|(complete.cases(data[, "To
 data$missingSocial_h2<-(!missingSocial_h2)
 sum(!missingSocial_h2)
 #58 Vige/VP still missing 
-#where true contact authors
+#where true, contact authors
 
 #alternatively, we ask directly for VIGE and VP since they may be useful for other points too (e.g. CVs, mean std variances, etc)
 data$missingVP<-is.na (data$Total_v_phen)
@@ -833,7 +823,6 @@ data$missingMean<-is.na (data$Trait_mean)
 #we would have to be sure at least for how h2 is calculated
 sum(is.na (data$V_ige)) #12 this we should have covered above 
 sum(is.na (data$Va))  #19
-#they are not so many, decide if we ask
 
 #it seems at least for VA we should ask directly
 data$missingVA<-is.na (data$Va)
@@ -850,10 +839,10 @@ sum(is.na(data$V_tbv))
 
 #compare with h2
 sum(is.na(data$H2))
-#116 NA, again we could ask for the data since backtransformation didn't seem reliable from va?
+#116 NA, again we could ask for the data since back-transformation didn't seem reliable from va
 
 
-#3. 	B)  More specifically, do IGEs constrain or speed up the evolution of traits (through their correlation with IGEs)? ##### did you mean "through their correlation with DGEs"?
+#3. 	B)  More specifically, do IGEs constrain or speed up the evolution of traits (through their correlation with DGEs)? 
 #parameters we need: 
 #here just use R_a_ige when provided and get an overall estimate, don't ask
 sum(is.na (data$R_a_ige))
@@ -874,7 +863,7 @@ write.csv(data, file = 'data/fulldataset.csv')
 #building dataset for contacting the authors
 
 
-#we had planned to ask social h2, mean trait and # of records when we thought we could extract VP by backtransforming
+#we had planned to ask social h2, mean trait and # of records when we thought we could extract VP by back-transforming
 setDT(data)
 authors <- data[, .(Paper_id, Record_id, Trait_name, Excluded_during_data_extraction, missingSocial_h2, missingMean, missingIdRecords, missingVA, missingVIGE, missingVP)]
 names(authors)
@@ -926,7 +915,7 @@ data3<-subset(data3, select =  -c(combo, Excluded_during_data_extraction, missin
 #################################
 #################################
 #################################
-#Dave's code for filling in data from the authors contacted
+#Code for filling in data from the authors contacted
 
 
 dataset = read.csv("data/fulldataset.csv", header=T)
@@ -944,7 +933,7 @@ dataset$Trait_mean[dataset$Paper_id == "IGE0253" & dataset$Trait_name == "dyadic
 dataset$Total_v_phen[dataset$Paper_id == "IGE0253" & dataset$Trait_name == "dyadic fights (fighting ability)"] = 11.2414
 
 #IGE0502
-dataset$Trait_mean[dataset$Paper_id == "IGE0502" & dataset$Trait_name == "social dominance"] = 0.4365 ##### typo where "dyadic fights (fighting ability)" should be "social dominance", corrected now; although we had a value already assigned to the Trait_mean of this study (0.5), the correct value is indeed 0.4365
+dataset$Trait_mean[dataset$Paper_id == "IGE0502" & dataset$Trait_name == "social dominance"] = 0.4365 ##### although we had a value already assigned to the Trait_mean of this study (0.5), the correct value is indeed 0.4365
 dataset$Total_v_phen[dataset$Paper_id == "IGE0502" & dataset$Trait_name == "social dominance"] = 0.2460
 
 #IGE0572 (note author supplied updated values for all variance components, which we are using to maintain relevance to the total VP)
@@ -1030,14 +1019,14 @@ dataset$N_id_w_records[dataset$Paper_id == "IGE0389" & dataset$Trait_name == "My
 #updating this as the trait was analysed after an arcsine transformation, which is then 48.03 
 dataset$Trait_mean[dataset$Paper_id == "IGE0389" & dataset$Trait_name == "Mycosphaerella leaf disease"] = 48.03
 
-#IGE0418 (note same dataset as above, author recommends using the results from this one)
+#IGE0418 (note same dataset as above)
 dataset$N_id_w_records[dataset$Paper_id == "IGE0418" & dataset$Trait_name == "Over-bark diameter at breast height at 2 years"] = 9107
 dataset$N_id_w_records[dataset$Paper_id == "IGE0418" & dataset$Trait_name == "Over-bark diameter at breast height at 4 years"] = 8913
 dataset$N_id_w_records[dataset$Paper_id == "IGE0418" & dataset$Trait_name == "Over-bark diameter at breast height at 8 years"] = 8767
 dataset$N_id_w_records[dataset$Paper_id == "IGE0418" & dataset$Trait_name == "percentage of juvenile foliage affected by Mycosphaerella leaf disease"] = 9107
 
 dataset$Trait_mean[dataset$Paper_id == "IGE0418" & dataset$Trait_name == "Over-bark diameter at breast height at 4 years"] = 135.1
-dataset$Trait_mean[dataset$Paper_id == "IGE0418" & dataset$Trait_name == "percentage of juvenile foliage affected by Mycosphaerella leaf disease"] = 48.03 ##### the original value was 23, so I have asked Dave to confirm that this new updated value of 48% is correct
+dataset$Trait_mean[dataset$Paper_id == "IGE0418" & dataset$Trait_name == "percentage of juvenile foliage affected by Mycosphaerella leaf disease"] = 48.03 
 
 dataset$Total_v_phen[dataset$Paper_id == "IGE0418" & dataset$Trait_name == "Over-bark diameter at breast height at 2 years"] = 245.6
 dataset$Total_v_phen[dataset$Paper_id == "IGE0418" & dataset$Trait_name == "Over-bark diameter at breast height at 4 years"] = 524.0
@@ -1184,22 +1173,18 @@ dataset$V_other_2[dataset$Paper_id == "IGE0493" & dataset$Trait_name == "old con
 dataset$V_other_2[dataset$Paper_id == "IGE0493" & dataset$Trait_name == "new cone hoard size" ] = 0.150
 dataset$V_other_2[dataset$Paper_id == "IGE0493" & dataset$Trait_name == "lifetime reproductive success (LRS)" ] = 4.947
 
-#For part date the trait was variance and mean standardised 
-#(this is recorded in the dataset so maybe not being caught by the code right now?) so mean is 0 and VP is 1
-
 #IGE0852
 dataset$Trait_mean[dataset$Paper_id == "IGE0852" & dataset$Trait_name == "parturition date" ] = 5.13 
 
 
-#IGE0144 ##### Fra, could you check if we can figure out why we did not include these data originally, was it a mistake and we took some decision not to include it? Just to be sure.
-#For some reason these were not entered initially, notes in excel file do not reveal why.
+#IGE0144 
 dataset$Va[dataset$Paper_id == "IGE0144" & dataset$Trait_name == "carcass weight (CW)"] = 0.34
 
 dataset$V_ige[dataset$Paper_id == "IGE0144" & dataset$Trait_name == "carcass weight (CW)"] = 0.007
 
 dataset$Variance_standardized[dataset$Paper_id == "IGE0144" & dataset$Trait_name == "carcass weight (CW)"] = "yes" ##### "Yes" substituted by "yes"
 
-#Note for traits that are variance standardised VP is effectively 1. I did not email this author as I don't think we are missing any data.
+#Note for traits that are variance standardised VP is effectively 1. 
 
 #IGE0824
 #Trait "oviposition pre mating" is allegedly missing V_IGE (and social h2), 
@@ -1216,7 +1201,7 @@ dataset$Trait_mean[dataset$Paper_id == "IGE0458" & dataset$Trait_name == "nestin
 dataset$Total_v_phen[dataset$Paper_id == "IGE0458" & dataset$Trait_name == "nesting site preference" ] = 0.25
 dataset$N_id_w_records[dataset$Paper_id == "IGE0458" & dataset$Trait_name == "nesting site preference" ] = 1537
 
-#JM said: "1005 pairs for which we identified both the male and the female. Among those, there were 791 unique females, and 746 unique males." so have summed n males and n females to get n unique indivs
+#JM [original author] said: "1005 pairs for which we identified both the male and the female. Among those, there were 791 unique females, and 746 unique males." so have summed n males and n females to get n unique indivs
 
 ##################################
 
@@ -1306,14 +1291,12 @@ dataset$Reported_values_flag[dataset$Paper_id == "IGE0502" ] = "YES"
 
 #"IGE0458" 
 #not clear what to use, discrepancies between pdf and online table for values
-# IGE0458: Shall we ask the authors if we should use the estimates from the pdf or the online table? (presumably the pdf, since they probably proof read that one...). 
-#I can play around with using the different VR reported, and use the one that fits the values, if any. Would that sound ok or a bit dodgy?
-#no typo. Binary model may be causing issues. Told by authors VP was 0.25 but they use a VR of 10 in the models, which goes some way to explaining why they get a much smaller h2 and social h2 than us. 
-#Values in dataset do not match what I can read from Table 3 in paper 
-#again may be issue with non gaussian traits
+# Binary model may be causing issues. Told by authors VP was 0.25 but they use a VR of 10 in the models, which goes some way to explaining why they get a much smaller h2 and social h2 than us. 
+#Values in dataset do not match  Table 3 in paper 
+#May be issue with non gaussian traits
 
 #I didn't do anything here, we can try to extract the data from the pdf instead, or just decide to use the values they report
-#and so flag this as a study where we don't recalculate things ourselves
+#and so this as a study where we don't recalculate things ourselves
 
 #"IGE0517"
 #binary model may be causing issues, told us VP was 0.086 but report VA of 0.07. Their h2 of 0.04 must be correct, or more correct than ours.
@@ -1332,23 +1315,21 @@ dataset$Reported_values_flag[dataset$Paper_id == "IGE0517" ] = "YES"
 #these mean VP is higher than summing the rest of the variance components.
 #I summed the other variance components and using that as VP gives the same h2 as the authors report, 
 #so I think that is what is going on.
-#Fra: I do not understand this, does it mean here we use our VP or their VP? change this accordingly
-#in that case include the flag variable
 
 
 #"IGE0920" –
 #was a mistake in our data extraction, we extracted h2 from a model without IGE in the paper
-#we should set to NA and use one we caluculate for all traits in that paper
+#we should set to NA and use one we calculate for all traits in that paper
 
 dataset$H2[dataset$Paper_id == "IGE0920"] = NA 
 
 # IGE0746
 #No idea how they get such low values. For neck feathers in the W1 line for example they report VA clearly as 0.135, and VP as 0.306 (Table S2),
 #and they say h2 is Va / VP in methods (eq. 3), so our calc of 0.44 should be correct. 
-#But they report 0.059 in Table 3, which is way off and not even something simply like a change from % to proportion and so x10 or x100 …
+#But they report 0.059 in Table 3, which is way off and not even something simple like a change from % to proportion and so x10 or x100 …
 #so not sure we understand where values come from, either we accept what authors report or we discard study
 
-#decide here and in case flag study for exclusion
+#Decided to accept what authors report
 
 # "IGE 1038"
 # they report both “phenotypic variance” [VP] and “total phenotypic variance” [TVP; always much larger than VP] – they use VP for the denominator in their h2, but TVP as the denominator for their T2. 
@@ -1356,9 +1337,6 @@ dataset$H2[dataset$Paper_id == "IGE0920"] = NA
 #As noted in the comments by Alfredo during extraction, it’s not clear what TVP is – they don’t ever describe it in the paper.
 #I would replace the VP values we have with the VPs they give (Table 1)
 #and then ignore their T2, we can calculate it ourselves from the TBV and VP they give.
-#For the first trait it gives a T2 of over 1 but that is fine, there are IGEs and a positive DGE-IGE cov, so T2 should be high, whereas they report a T2 of the same as their h2 – def wrong.
-#For IGE1038 I think we use the “phenotypic variance” as they report it. 
-#I see where Maria is coming from [not confident in using estimatees] but I feel we can’t error check every paper and we’re better using it than discarding it.
 
 dataset$Total_v_phen[dataset$Paper_id == "IGE1038" & dataset$Trait_name == "average daily gain (ADG)"] = 5335.67
 dataset$Total_v_phen[dataset$Paper_id == "IGE1038" & dataset$Trait_name == "days to 100 kg (D100)"] = 631.40
@@ -1372,6 +1350,6 @@ dataset$Total_v_phen[dataset$Paper_id == "IGE1038" & dataset$Trait_name == "resi
 
 #################
 
-write.csv(dataset, file = 'data/dataset_final_after_cleaning_and_adding_author_contact_FS_MM.csv') ##### changed the name of the file to make it more self-explanatory since we are accummulating a few datasets already
+write.csv(dataset, file = 'data/dataset_final_after_cleaning_and_adding_author_contact_FS_MM.csv') 
 
 
