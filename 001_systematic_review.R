@@ -158,11 +158,15 @@ full.ref.data <- rbind(wos.red,
 #                                      match_function = "fuzzdist",
 #                                      method = "fuzz_m_ratio",
 #                                      remove_punctuation = T,
-#                                      threshold = 0.1) # 0.1 = 3578, 0.2 = 3558 I choose 0.2
+#                                      threshold = 0.1)
 # 
 # # extracing duplicates
 # screening.ref.data <- extract_unique_references(full.ref.data,search.duplicated)
 # write.csv(screening.ref.data,"literature_review/search_unique_references_extracted.csv",row.names=FALSE)
+# Note: we exported the file to manually find for duplicates in Excel and then 
+# unfortunately forgot to modify the name of the file before importing it back
+# Given that we provide the edited file, this should not be a problem for 
+# the computational reproducibility of this code.
 screening.ref.data <- read.table("literature_review/search_unique_references_extracted.csv",
                                  header=T,sep=",")
 
