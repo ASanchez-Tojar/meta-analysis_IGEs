@@ -7,10 +7,9 @@ Francesca Santostefano*, Maria Moiron*, Alfredo Sánchez-Tójar*, David N. Fishe
 The dataset is:
 dataset_final_after_cleaning_and_adding_author_contact_FS_MM.csv
 
-Note: some unused variables may get deleted, to be updated after we have the final dataset for the analyses
-
-Record_id: Progressive row number
 Paper_id: unique identifier assigned to a paper
+X: progressive row number 
+Record_id: unique record id  
 Year: publication year
 Species_name: latin name of the species 
 Taxon: taxon to which the study species belongs. Categorical: insects/mammals/reptiles/amphibians/birds/fish
@@ -80,5 +79,7 @@ missingIdRecords: whether the paper is missing the # of records (yes/no)
 Total_v_phen2: Total_v_phen2 is calculated as:  = 1 if trait is variance standardized, else copy value of reported VP from Total_v_phen	
 Trait_mean2: mean = 0 if trait is mean standardized, else copy value of reported mean,	
 Reported_values_flag: to flag studies where instead of using our calculated variables like ratios we should use what they report, it is usually non gaussian traits and specific cases we went through	
-Excluded_after_control: NA	
-social_h2: NA
+Excluded_after_control: was the paper excluded after the final data control	
+social_h2: not used in final analyses
+Year_of_Publication: publication year
+
