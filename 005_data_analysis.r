@@ -1978,6 +1978,32 @@ print(meta.model.IGE.subset3C.NI, digits=3)
 # with DGEs (and group size) and comparing to H2, see if it is larger or smaller
 # We also look at the DGE-IGE correlation and see the overall direction
 
+# first preparing the dataset for the following analyses
+
+# Calculate Vtbv:
+dataset.IGE$V_tbv_calc <- dataset.IGE$Va + 
+  dataset.IGE$Cov_a_ige*2*(dataset.IGE$Mean_group_size-1) + 
+  dataset.IGE$V_ige*((dataset.IGE$Mean_group_size-1)^2)
+
+# Calculate Vtbv but using using the transform V_ige 0 values (see above):
+# substituting all those values for their corresponding minimum value
+dataset.IGE$V_ige_2 <- ifelse((dataset.IGE$Paper_id %in% 
+                                 c("IGE0501","IGE0468","IGE0406")) & dataset.IGE$V_ige==0,
+                              0.0001,
+                              ifelse((dataset.IGE$Paper_id %in% 
+                                        c("IGE0857")) & dataset.IGE$V_ige==0,
+                                     0.001,ifelse((dataset.IGE$Paper_id %in% 
+                                                     c("IGE0203")) & dataset.IGE$V_ige==0,
+                                                  0.1,
+                                                  dataset.IGE$V_ige)
+                              ))
+
+
+dataset.IGE$V_tbv_calc_2 <- dataset.IGE$Va + 
+  dataset.IGE$Cov_a_ige*2*(dataset.IGE$Mean_group_size-1) + 
+  dataset.IGE$V_ige_2*((dataset.IGE$Mean_group_size-1)^2)
+
+
 ################################################################################
 # 4A: What is the magnitude of the DGE-IGE correlation?
 
@@ -2128,9 +2154,9 @@ predict(meta.model.IGE.subset4B, digits=3)
 # why is the following not the same as above? Because the following is the 
 # unstandardized raw variance whereas the previous is the sampling variance
 round(sum(meta.model.IGE.subset4B$sigma2),4)
-round(i2_ml(meta.model.IGE.subset4B),4)
-round(cv_ml(meta.model.IGE.subset4B),4)
-round(m1_ml(meta.model.IGE.subset4B),4)
+round(i2_ml(meta.model.IGE.subset4B),2)
+round(cv_ml(meta.model.IGE.subset4B),2)
+round(m1_ml(meta.model.IGE.subset4B),2)
 
 # Output as table
 ige_4b_res <- hux(predict(meta.model.IGE.subset4B, digits=3)) %>%
@@ -2149,29 +2175,7 @@ sum(!(is.na(dataset.IGE$V_tbv))) #97 effect sizes presented
 hist(dataset.IGE$V_tbv) # wild range
 hist(dataset.IGE$V_tbv/dataset.IGE$Total_v_phen3) # this is T2, its better, ranges from 0 to 5
 
-# Calculate Vtbv:
-dataset.IGE$V_tbv_calc <- dataset.IGE$Va + 
-  dataset.IGE$Cov_a_ige*2*(dataset.IGE$Mean_group_size-1) + 
-  dataset.IGE$V_ige*((dataset.IGE$Mean_group_size-1)^2)
-
-# Calculate Vtbv but using using the transform V_ige 0 values (see above):
-# substituting all those values for their corresponding minimum value
-dataset.IGE$V_ige_2 <- ifelse((dataset.IGE$Paper_id %in% 
-                                 c("IGE0501","IGE0468","IGE0406")) & dataset.IGE$V_ige==0,
-                              0.0001,
-                              ifelse((dataset.IGE$Paper_id %in% 
-                                        c("IGE0857")) & dataset.IGE$V_ige==0,
-                                     0.001,ifelse((dataset.IGE$Paper_id %in% 
-                                                     c("IGE0203")) & dataset.IGE$V_ige==0,
-                                                  0.1,
-                                                  dataset.IGE$V_ige)
-                              ))
-
-
-dataset.IGE$V_tbv_calc_2 <- dataset.IGE$Va + 
-  dataset.IGE$Cov_a_ige*2*(dataset.IGE$Mean_group_size-1) + 
-  dataset.IGE$V_ige_2*((dataset.IGE$Mean_group_size-1)^2)
-
+# printing calculated values above
 par(mfrow=c(1,2))
 
 with(dataset.IGE, plot(V_tbv, V_tbv_calc, xlim=c(0,8000),ylim=c(0,8000)))
