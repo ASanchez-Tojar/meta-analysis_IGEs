@@ -599,9 +599,9 @@ diag(subset1A_VCV_ESVar) <- dataset.IGE.subset1A[,"VZr"]
 # creating a copy of Species_name.2 for phylogenetic effect
 dataset.IGE.subset1A$Species_name.2.phylo <- dataset.IGE.subset1A$Species_name.2
 
-# saving the subset for script 006_figures.R
-write.csv(dataset.IGE.subset1A, file = "data/subsets/dataset_IGE_subset1A.csv",
-          row.names = F)
+# # saving the subset for script 006_figures.R
+# write.csv(dataset.IGE.subset1A, file = "data/subsets/dataset_IGE_subset1A.csv",
+#           row.names = F)
 
 # subsetting phylo_cor for this subset of the data
 phylo_cor.subset1A <- phylo_cor[rownames(phylo_cor) %in% 
@@ -612,7 +612,7 @@ phylo_cor.subset1A <- phylo_cor[rownames(phylo_cor) %in%
 
 # MAIN MODEL = multilevel meta-analysis (i.e. the intercept-only model)
 meta.model.IGE.subset1A <- rma.mv(Social_h2_2_Zr,
-                                  subset1A_VCV_ESVar, 
+                                  subset1A_VCV_ESVar,
                                   mods = ~ 1,
                                   random = list(~ 1 | Paper_id,
                                                 ~ 1 | Group_id,
@@ -621,15 +621,15 @@ meta.model.IGE.subset1A <- rma.mv(Social_h2_2_Zr,
                                                 ~ 1 | Species_name.2.phylo,
                                                 ~ 1 | Record_id),
                                   R = list(Species_name.2.phylo = phylo_cor.subset1A),
-                                  method = "REML", 
-                                  test = "t", 
-                                  data = dataset.IGE.subset1A, 
+                                  method = "REML",
+                                  test = "t",
+                                  data = dataset.IGE.subset1A,
                                   control=list(rel.tol=1e-9))
 
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset1A, file = "data/models/meta_model_IGE_subset1A.Rdata")
 
-# model can be loaded instead of run using the following
+# # model can be loaded instead of run using the following
 # load("data/models/meta_model_IGE_subset1A.Rdata")
 
 
@@ -641,6 +641,10 @@ print(meta.model.IGE.subset1A, digits=3)
 # of the effect sizes of any future or unknown studies with similar features
 # as those included in the current database
 predict(meta.model.IGE.subset1A, digits=3)
+
+# back-transformed mean estimate
+print(Zr.to.r(meta.model.IGE.subset1A$b[1]))
+
 
 # # Model funnel plots
 # par(mfrow = c(1, 1))
@@ -666,9 +670,9 @@ predict(meta.model.IGE.subset1A, digits=3)
 # why is the following not the same as above? Because the following is the 
 # unstandardized raw variance whereas the previous is the sampling variance
 round(sum(meta.model.IGE.subset1A$sigma2),4)
-round(i2_ml(meta.model.IGE.subset1A),4)
-round(cv_ml(meta.model.IGE.subset1A),4)
-round(m1_ml(meta.model.IGE.subset1A),4)
+round(i2_ml(meta.model.IGE.subset1A),1)
+round(cv_ml(meta.model.IGE.subset1A),2)
+round(m1_ml(meta.model.IGE.subset1A),2)
 
 
 # Output as table
@@ -1369,9 +1373,9 @@ phylo_cor.subset3A_no_zeros <- phylo_cor[rownames(phylo_cor) %in%
 dataset.IGE.subset3A_long_no_zeros%>%group_by(direct_social)%>%summarise(Average=log(mean(dat3A_var, rm.na=TRUE)))
 dataset.IGE.subset3A_long_no_zeros$direct_social<- recode_factor(dataset.IGE.subset3A_long_no_zeros$direct_social, Va  = "V_a", V_ige = "V_ige")
 
-# saving the subset for script 006_figures.R
-write.csv(dataset.IGE.subset3A_long_no_zeros, file = "data/subsets/dataset_IGE_subset3A_long_no_zeros.csv",
-          row.names = F)
+# # saving the subset for script 006_figures.R
+# write.csv(dataset.IGE.subset3A_long_no_zeros, file = "data/subsets/dataset_IGE_subset3A_long_no_zeros.csv",
+#           row.names = F)
 
 meta.model.IGE.subset3A_no_zeros <- rma.mv(dat3A_var_l,
                                            subset3A_long_no_zeros_VCV_ESVar,
@@ -1739,9 +1743,9 @@ diag(subset3B_long_VCV_ESVar) <- dataset.IGE.subset3B_long[,"VZr"]
 # Still need to create a copy of Species_name.2 for phylogenetic effect
 dataset.IGE.subset3B_long$Species_name.2.phylo <- dataset.IGE.subset3B_long$Species_name.2
 
-# saving the subset for script 006_figures.R
-write.csv(dataset.IGE.subset3B_long, file = "data/subsets/dataset_IGE_subset3B_long.csv",
-          row.names = F)
+# # saving the subset for script 006_figures.R
+# write.csv(dataset.IGE.subset3B_long, file = "data/subsets/dataset_IGE_subset3B_long.csv",
+#           row.names = F)
 
 meta.model.IGE.subset3B <- rma.mv(dat3B_Zr,
                                   subset3B_long_VCV_ESVar,
@@ -1904,9 +1908,9 @@ diag(subset3C_long_VCV_ESVar) <- dataset.IGE.subset3C_long[,"VZr"]
 # creating a copy of Species_name.2 for phylogenetic effect
 dataset.IGE.subset3C_long$Species_name.2.phylo <- dataset.IGE.subset3C_long$Species_name.2
 
-# saving the subset for script 006_figures.R
-write.csv(dataset.IGE.subset3C_long, file = "data/subsets/dataset_IGE_subset3C_long.csv",
-          row.names = F)
+# # saving the subset for script 006_figures.R
+# write.csv(dataset.IGE.subset3C_long, file = "data/subsets/dataset_IGE_subset3C_long.csv",
+#           row.names = F)
 
 phylo_cor.subset3C <- phylo_cor[rownames(phylo_cor) %in% 
                                   unique(as.character(dataset.IGE.subset3C_long$Species_name.2)),
@@ -2065,9 +2069,9 @@ diag(subset4B_VCV_ESVar) <- dataset.IGE.subset4B[,"VZr"]
 # creating a copy of Species_name.2 for phylogenetic effect
 dataset.IGE.subset4B$Species_name.2.phylo <- dataset.IGE.subset4B$Species_name.2
 
-# saving the subset for script 006_figures.R
-write.csv(dataset.IGE.subset4B, file = "data/subsets/dataset_IGE_subset4B.csv",
-          row.names = F)
+# # saving the subset for script 006_figures.R
+# write.csv(dataset.IGE.subset4B, file = "data/subsets/dataset_IGE_subset4B.csv",
+#           row.names = F)
 
 phylo_cor.subset4B <- phylo_cor[rownames(phylo_cor) %in% 
                                   unique(as.character(dataset.IGE.subset4B$Species_name.2)),
@@ -2291,9 +2295,9 @@ diag(subset4A_long_VCV_ESVar) <- dataset.IGE.subset4A_long[,"VZr"]
 # creating a copy of Species_name.2 for phylogenetic effect
 dataset.IGE.subset4A_long$Species_name.2.phylo <- dataset.IGE.subset4A_long$Species_name.2
 
-# saving the subset for script 006_figures.R
-write.csv(dataset.IGE.subset4A_long, file = "data/subsets/dataset_IGE_subset4A_long.csv",
-          row.names = F)
+# # saving the subset for script 006_figures.R
+# write.csv(dataset.IGE.subset4A_long, file = "data/subsets/dataset_IGE_subset4A_long.csv",
+#           row.names = F)
 
 phylo_cor.subset4A <- phylo_cor[rownames(phylo_cor) %in% 
                                   unique(as.character(dataset.IGE.subset4A_long$Species_name.2)),
