@@ -447,7 +447,7 @@ IGEmeta.regression.h2.vs.Totalh2_plot <- orchard_plot(mod_results(meta.model.IGE
                                                       trunk.size = 2,
                                                       branch.size = 1.5,
                                                       alpha = 0.3,
-                                                      transfm = "tanh",
+                                                      #transfm = "tanh",
                                                       fill = T)+
   scale_fill_manual(values=c("#f2d116","aquamarine4")) +
   scale_colour_manual(values=c("#f2d116","aquamarine4"))+
