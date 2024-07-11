@@ -810,7 +810,8 @@ IGEmeta.regression.FEPartner <- rma.mv(Social_h2_2_Zr,
                                        R = list(Species_name.2.phylo = phylo_cor.subset1A),
                                        method = "REML", 
                                        test = "t", 
-                                       data = dataset.IGE.subset1A)
+                                       data = dataset.IGE.subset1A, 
+                                       control=list(rel.tol=1e-9))
 
 # saving the model for script 006_figures.R
 save(IGEmeta.regression.FEPartner, 
@@ -1045,58 +1046,58 @@ IGEmeta.regression.Sex.NI <- rma.mv(Social_h2_2_Zr,
 print(IGEmeta.regression.Sex.NI, digits=3)
 
 
-################################################################################
-# Study type
-summary(dataset.IGE.subset1A$Study_type)
-# 140 experimental 6 observational
-sum(summary(dataset.IGE.subset1A$Study_type))
-
-IGEmeta.regression.StudyType <- rma.mv(Social_h2_2_Zr,
-                                       subset1A_VCV_ESVar, 
-                                       mods = ~ Study_type,
-                                       random = list(~ 1 | Paper_id,
-                                                     ~ 1 | Group_id,
-                                                     ~ 1 | Population2,
-                                                     ~ 1 | Species_name.2,
-                                                     ~ 1 | Species_name.2.phylo,
-                                                     ~ 1 | Record_id),
-                                       R = list(Species_name.2.phylo = phylo_cor.subset1A),
-                                       method = "REML", 
-                                       test = "t", 
-                                       data = dataset.IGE.subset1A)
-
-# saving the model for script 006_figures.R
-save(IGEmeta.regression.StudyType, 
-     file = "data/models/IGEmeta_regression_StudyType.Rdata")
-
-# model can be loaded instead of run using the following
-# load("data/models/IGEmeta_regression_StudyType.Rdata")
-
-# Printing the summary results of the model
-print(IGEmeta.regression.StudyType, digits=3)
-
-
-# Calculate marginal R2 with r2_ml
-R2.mr.StudyType <- r2_ml(IGEmeta.regression.StudyType) 
-round(R2.mr.StudyType*100, 1)
-
-
-# removing the intercept for easy plotting and visualization
-IGEmeta.regression.StudyType.NI <- rma.mv(Social_h2_2_Zr,
-                                          subset1A_VCV_ESVar, 
-                                          mods = ~ Study_type-1,
-                                          random = list(~ 1 | Paper_id,
-                                                        ~ 1 | Group_id,
-                                                        ~ 1 | Population2,
-                                                        ~ 1 | Species_name.2,
-                                                        ~ 1 | Species_name.2.phylo,
-                                                        ~ 1 | Record_id),
-                                          R = list(Species_name.2.phylo = phylo_cor.subset1A),
-                                          method = "REML", 
-                                          test = "t", 
-                                          data = dataset.IGE.subset1A)
-
-print(IGEmeta.regression.StudyType.NI, digits=3)
+# ################################################################################
+# # Study type
+# summary(dataset.IGE.subset1A$Study_type)
+# # 140 experimental 6 observational
+# sum(summary(dataset.IGE.subset1A$Study_type))
+# 
+# IGEmeta.regression.StudyType <- rma.mv(Social_h2_2_Zr,
+#                                        subset1A_VCV_ESVar, 
+#                                        mods = ~ Study_type,
+#                                        random = list(~ 1 | Paper_id,
+#                                                      ~ 1 | Group_id,
+#                                                      ~ 1 | Population2,
+#                                                      ~ 1 | Species_name.2,
+#                                                      ~ 1 | Species_name.2.phylo,
+#                                                      ~ 1 | Record_id),
+#                                        R = list(Species_name.2.phylo = phylo_cor.subset1A),
+#                                        method = "REML", 
+#                                        test = "t", 
+#                                        data = dataset.IGE.subset1A)
+# 
+# # saving the model for script 006_figures.R
+# save(IGEmeta.regression.StudyType, 
+#      file = "data/models/IGEmeta_regression_StudyType.Rdata")
+# 
+# # model can be loaded instead of run using the following
+# # load("data/models/IGEmeta_regression_StudyType.Rdata")
+# 
+# # Printing the summary results of the model
+# print(IGEmeta.regression.StudyType, digits=3)
+# 
+# 
+# # Calculate marginal R2 with r2_ml
+# R2.mr.StudyType <- r2_ml(IGEmeta.regression.StudyType) 
+# round(R2.mr.StudyType*100, 1)
+# 
+# 
+# # removing the intercept for easy plotting and visualization
+# IGEmeta.regression.StudyType.NI <- rma.mv(Social_h2_2_Zr,
+#                                           subset1A_VCV_ESVar, 
+#                                           mods = ~ Study_type-1,
+#                                           random = list(~ 1 | Paper_id,
+#                                                         ~ 1 | Group_id,
+#                                                         ~ 1 | Population2,
+#                                                         ~ 1 | Species_name.2,
+#                                                         ~ 1 | Species_name.2.phylo,
+#                                                         ~ 1 | Record_id),
+#                                           R = list(Species_name.2.phylo = phylo_cor.subset1A),
+#                                           method = "REML", 
+#                                           test = "t", 
+#                                           data = dataset.IGE.subset1A)
+# 
+# print(IGEmeta.regression.StudyType.NI, digits=3)
 
 
 ################################################################################
@@ -2127,6 +2128,7 @@ save(meta.model.IGE.subset4B, file = "data/models/meta_model_IGE_DGE-IGE_correla
 # Printing the summary results of the model
 print(meta.model.IGE.subset4B, digits=3)
 
+round(print(Zr.to.r(as.numeric(meta.model.IGE.subset4B[1]))),2)
 
 # Printing the results again, but adding the credibility/prediction interval, 
 # which uses the heterogeneity to generate an interval that should contain 95%
@@ -2356,6 +2358,10 @@ meta.model.IGE.subset4A.NI <- rma.mv(dat4A_herit,
 
 # Printing the summary results of the model
 print(meta.model.IGE.subset4A.NI, digits=3) 
+
+# round(print(Zr.to.r(as.numeric(meta.model.IGE.subset4A.NI$b[1]))),2)
+# round(print(Zr.to.r(as.numeric(meta.model.IGE.subset4A.NI$b[2]))),2)
+
 
 
 
