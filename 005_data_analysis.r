@@ -176,7 +176,7 @@ rm(list=ls())
 # Here, r correspond to our variance standardized variance estimates and the
 # correlations
 r.to.Zr <- function(r){
-  Zr <- round(0.5*(log(1+r)-log(1-r)),3)
+  Zr <- 0.5*(log(1+r)-log(1-r))
 }
 
 # function to obtain variance of Zr
@@ -186,7 +186,7 @@ VZr <- function(N){
 
 # function to back-transform r from Zr
 Zr.to.r <- function(Zr){
-  Zr <- round((exp(2*Zr)-1)/(exp(2*Zr)+1),3)
+  Zr <- (exp(2*Zr)-1)/(exp(2*Zr)+1)
 }
 
 
