@@ -2976,8 +2976,8 @@ print(meta.model.IGE.subset3B.NI.VZR10x, digits=3)
 # 4A: What is the magnitude of the DGE-IGE correlation?
 
 subset4B_VCV_ESVar.VZR10x <- matrix(0, 
-                             nrow=nrow(dataset.IGE.subset4B), 
-                             ncol=nrow(dataset.IGE.subset4B))
+                                    nrow=nrow(dataset.IGE.subset4B), 
+                                    ncol=nrow(dataset.IGE.subset4B))
 
 # Names rows and columns for each Record_id
 rownames(subset4B_VCV_ESVar.VZR10x) <- dataset.IGE.subset4B[,"Record_id"]
@@ -2985,16 +2985,16 @@ colnames(subset4B_VCV_ESVar.VZR10x) <- dataset.IGE.subset4B[,"Record_id"]
 
 # Finds effect sizes that come from the same study
 shared_coord.subset4B.VZR10x <- which(dataset.IGE.subset4B[,"Paper_id"] %in% 
-                                 dataset.IGE.subset4B[
-                                   duplicated(dataset.IGE.subset4B[,"Paper_id"]), 
-                                   "Paper_id"]==TRUE)
+                                        dataset.IGE.subset4B[
+                                          duplicated(dataset.IGE.subset4B[,"Paper_id"]), 
+                                          "Paper_id"]==TRUE)
 
 combinations.subset4B.VZR10x <- do.call("rbind", tapply(shared_coord.subset4B.VZR10x, 
-                                                 dataset.IGE.subset4B[
-                                                   shared_coord.subset4B.VZR10x, 
-                                                   "Paper_id"], 
-                                                 function(x) t(utils::combn(x, 
-                                                                            2))))
+                                                        dataset.IGE.subset4B[
+                                                          shared_coord.subset4B.VZR10x, 
+                                                          "Paper_id"], 
+                                                        function(x) t(utils::combn(x, 
+                                                                                   2))))
 
 # Calculates the covariance between effect sizes and enters them in each 
 # combination of coordinates
@@ -3013,18 +3013,18 @@ diag(subset4B_VCV_ESVar.VZR10x) <- dataset.IGE.subset4B[,"VZr"]*10
 
 
 meta.model.IGE.subset4B.VZR10x <- rma.mv(R_a_ige_2_Zr,
-                                  subset4B_VCV_ESVar.VZR10x, 
-                                  mods = ~ 1,
-                                  random = list(~ 1 | Paper_id,
-                                                ~ 1 | Group_id,
-                                                ~ 1 | Population2,
-                                                ~ 1 | Species_name.2,
-                                                ~ 1 | Species_name.2.phylo,
-                                                ~ 1 | Record_id),
-                                  R = list(Species_name.2.phylo = phylo_cor.subset4B),
-                                  method = "REML", 
-                                  test = "t", 
-                                  data = dataset.IGE.subset4B)
+                                         subset4B_VCV_ESVar.VZR10x, 
+                                         mods = ~ 1,
+                                         random = list(~ 1 | Paper_id,
+                                                       ~ 1 | Group_id,
+                                                       ~ 1 | Population2,
+                                                       ~ 1 | Species_name.2,
+                                                       ~ 1 | Species_name.2.phylo,
+                                                       ~ 1 | Record_id),
+                                         R = list(Species_name.2.phylo = phylo_cor.subset4B),
+                                         method = "REML", 
+                                         test = "t", 
+                                         data = dataset.IGE.subset4B)
 
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset4B.VZR10x, file = "data/models/VZr10x/meta_model_IGE_DGE-IGE_correlation_VZR10x.Rdata")
@@ -3049,7 +3049,7 @@ round(m1_ml(meta.model.IGE.subset4B.VZR10x),2)
 # 4B: Total heritability (T2) vs narrow-sense heritability (h2)
 
 subset4A_long_VCV_ESVar.VZR10x <- matrix(0, nrow=nrow(dataset.IGE.subset4A_long), 
-                                  ncol=nrow(dataset.IGE.subset4A_long))
+                                         ncol=nrow(dataset.IGE.subset4A_long))
 
 # Names rows and columns for each Record_id_long
 rownames(subset4A_long_VCV_ESVar.VZR10x) <- dataset.IGE.subset4A_long[,"Record_id_long"]
@@ -3057,16 +3057,16 @@ colnames(subset4A_long_VCV_ESVar.VZR10x) <- dataset.IGE.subset4A_long[,"Record_i
 
 # Finds effect sizes that come from the same study
 shared_coord.subset4A_long.VZR10x <- which(dataset.IGE.subset4A_long[,"Paper_id"] %in% 
-                                      dataset.IGE.subset4A_long[
-                                        duplicated(dataset.IGE.subset4A_long[,"Paper_id"]), 
-                                        "Paper_id"]==TRUE)
+                                             dataset.IGE.subset4A_long[
+                                               duplicated(dataset.IGE.subset4A_long[,"Paper_id"]), 
+                                               "Paper_id"]==TRUE)
 
 combinations.subset4A_long.VZR10x <- do.call("rbind", tapply(shared_coord.subset4A_long.VZR10x, 
-                                                      dataset.IGE.subset4A_long[
-                                                        shared_coord.subset4A_long.VZR10x, 
-                                                        "Paper_id"], 
-                                                      function(x) t(utils::combn(x, 
-                                                                                 2))))
+                                                             dataset.IGE.subset4A_long[
+                                                               shared_coord.subset4A_long.VZR10x, 
+                                                               "Paper_id"], 
+                                                             function(x) t(utils::combn(x, 
+                                                                                        2))))
 
 # Calculates the covariance between effect sizes and enters them in each 
 # combination of coordinates
@@ -3085,19 +3085,19 @@ diag(subset4A_long_VCV_ESVar.VZR10x) <- dataset.IGE.subset4A_long[,"VZr"]*10
 
 
 meta.model.IGE.subset4A.VZR10x <- rma.mv(dat4A_herit,
-                                  subset4A_long_VCV_ESVar.VZR10x,
-                                  mods = ~ direct_social,
-                                  random = list(~ 1 | Paper_id,
-                                                ~ 1 | Group_id,
-                                                ~ 1 | Population2,
-                                                ~ 1 | Species_name.2,
-                                                ~ 1 | Species_name.2.phylo,
-                                                ~ 1 | Record_id_long,
-                                                ~ 1 | Record_id),
-                                  R = list(Species_name.2.phylo = phylo_cor.subset4A),
-                                  method = "REML", 
-                                  test = "t", 
-                                  data = dataset.IGE.subset4A_long)
+                                         subset4A_long_VCV_ESVar.VZR10x,
+                                         mods = ~ direct_social,
+                                         random = list(~ 1 | Paper_id,
+                                                       ~ 1 | Group_id,
+                                                       ~ 1 | Population2,
+                                                       ~ 1 | Species_name.2,
+                                                       ~ 1 | Species_name.2.phylo,
+                                                       ~ 1 | Record_id_long,
+                                                       ~ 1 | Record_id),
+                                         R = list(Species_name.2.phylo = phylo_cor.subset4A),
+                                         method = "REML", 
+                                         test = "t", 
+                                         data = dataset.IGE.subset4A_long)
 
 # saving the model for script 006_figures.R
 save(meta.model.IGE.subset4A.VZR10x, 
@@ -3116,19 +3116,19 @@ round(R2.IGE.subset4A.VZR10x*100, 1)
 
 # Run without intercept
 meta.model.IGE.subset4A.NI.VZR10x <- rma.mv(dat4A_herit,
-                                     subset4A_long_VCV_ESVar.VZR10x,
-                                     mods = ~ direct_social-1,
-                                     random = list(~ 1 | Paper_id,
-                                                   ~ 1 | Group_id,
-                                                   ~ 1 | Population2,
-                                                   ~ 1 | Species_name.2,
-                                                   ~ 1 | Species_name.2.phylo,
-                                                   ~ 1 | Record_id_long,
-                                                   ~ 1 | Record_id),
-                                     R = list(Species_name.2.phylo = phylo_cor.subset4A),
-                                     method = "REML", 
-                                     test = "t", 
-                                     data = dataset.IGE.subset4A_long)
+                                            subset4A_long_VCV_ESVar.VZR10x,
+                                            mods = ~ direct_social-1,
+                                            random = list(~ 1 | Paper_id,
+                                                          ~ 1 | Group_id,
+                                                          ~ 1 | Population2,
+                                                          ~ 1 | Species_name.2,
+                                                          ~ 1 | Species_name.2.phylo,
+                                                          ~ 1 | Record_id_long,
+                                                          ~ 1 | Record_id),
+                                            R = list(Species_name.2.phylo = phylo_cor.subset4A),
+                                            method = "REML", 
+                                            test = "t", 
+                                            data = dataset.IGE.subset4A_long)
 
 # Printing the summary results of the model
 print(meta.model.IGE.subset4A.NI.VZR10x, digits=3) 
