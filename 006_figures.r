@@ -68,6 +68,14 @@ load("data/models/meta_model_IGE_DGE-IGE_correlation.Rdata") # meta.model.IGE.su
 load("data/models/meta_model_IGE_subset1A_SSE.Rdata") # meta.model.IGE.subset1A.SSE
 load("data/models/meta_model_IGE_subset1A_DE.Rdata") # meta.model.IGE.subset1A.DE
 
+load("data/models/VZr10x/meta_model_IGE_subset1A_VZR10x.Rdata") # meta.model.IGE.subset1A.VZR10x
+load("data/models/VZr10x/IGEmeta_regression_TraitCat_VZR10x.Rdata") # IGEmeta.regression.TraitCat.VZR10x
+load("data/models/VZr10x/IGEmeta_regression_Age_VZR10x.Rdata") # IGEmeta.regression.Age.VZR10x
+load("data/models/VZr10x/IGEmeta_regression_h2_vs_socialh2_VZR10x.Rdata") # meta.model.IGE.subset3B.VZR10x
+load("data/models/VZr10x/meta_model_IGE_DGE-IGE_correlation_VZR10x.Rdata") # meta.model.IGE.subset4B.VZR10x
+load("data/models/VZr10x/IGEmeta_regression_h2_vs_Totalh2_VZR10x.Rdata") # meta.model.IGE.subset4A.VZR10x
+
+
 ################################################################################
 # Q1: What is the proportion of variance in traits explained by IGEs?
 
@@ -114,19 +122,19 @@ ggsave("figures/Fig2.png", plot = meta.model.IGE.subset1A_plot,
 print(IGEmeta.regression.FEPartner, digits=3)
 
 IGEmeta.regression.FEPartner_plot <- orchard_plot(mod_results(IGEmeta.regression.FEPartner,
-                                                             mod = "Fixed_eff_of_partner_trait",
-                                                             group = "Paper_id",
-                                                             data = dataset.IGE.subset1A),
-                                                 xlab = "Effect size (r)",
-                                                 angle = 0,
-                                                 trunk.size = 2,
-                                                 branch.size = 1.5,
-                                                 alpha = 0.3,
-                                                 transfm = "tanh",
-                                                 fill = T)
+                                                              mod = "Fixed_eff_of_partner_trait",
+                                                              group = "Paper_id",
+                                                              data = dataset.IGE.subset1A),
+                                                  xlab = "Effect size (r)",
+                                                  angle = 0,
+                                                  trunk.size = 2,
+                                                  branch.size = 1.5,
+                                                  alpha = 0.3,
+                                                  transfm = "tanh",
+                                                  fill = T)
 
 IGEmeta.regression.FEPartner_plot = IGEmeta.regression.FEPartner_plot +
- scale_x_discrete(labels = c('Partner effect: no','Partner effect: yes'))
+  scale_x_discrete(labels = c('Partner effect: no','Partner effect: yes'))
 
 # IGEmeta.regression.FEPartner_plot
 
@@ -185,10 +193,10 @@ IGEmeta.regression.Age_plot <- orchard_plot(mod_results(IGEmeta.regression.Age,
 IGEmeta.regression.Age_plot = IGEmeta.regression.Age_plot+
   scale_x_discrete(labels=c("Juv" = "      Juvenile", "Ad" = "Adult"))+
   theme(plot.title = element_text(face="bold", size = 12,hjust = 0.5),
-                                     axis.title.y = element_text(size = 15),
-                                     axis.title.x = element_blank(),
-                                     axis.text.y = element_text(size = 15), 
-                                     axis.text.x = element_text(size = 10))
+        axis.title.y = element_text(size = 15),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 15), 
+        axis.text.x = element_text(size = 10))
 
 #IGEmeta.regression.Age_plot
 
@@ -267,10 +275,10 @@ IGEmeta.regression.PopType_plot <- orchard_plot(mod_results(IGEmeta.regression.P
 
 IGEmeta.regression.PopType_plot = IGEmeta.regression.PopType_plot+
   theme(plot.title = element_text(face="bold", size = 12,hjust = 0.5),
-                                     axis.title.y = element_text(size = 15),
-                                     axis.title.x = element_text(size = 15),
-                                     axis.text.y = element_text(size = 15), 
-                                     axis.text.x = element_text(size = 10))
+        axis.title.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.text.y = element_text(size = 15), 
+        axis.text.x = element_text(size = 10))
 
 #IGEmeta.regression.PopType_plot
 
@@ -293,23 +301,23 @@ IGEmeta.regression.Livestock_plot <- orchard_plot(mod_results(IGEmeta.regression
                                                   fill = T)
 
 IGEmeta.regression.Livestock_plot <- IGEmeta.regression.Livestock_plot + 
-scale_x_discrete(labels=c("Yes" = "Livestock", "No" = "Non-livestock"))
+  scale_x_discrete(labels=c("Yes" = "Livestock", "No" = "Non-livestock"))
 
 ggsave("figures/FigS5.png", plot = IGEmeta.regression.Livestock_plot, height = 100, width = 190, units = "mm", dpi = 600)
 
 ###################
 
 fig3<- ggarrange(#IGEmeta.regression.FEPartner_plot,
-                  IGEmeta.regression.TraitCat_plot,
-                  IGEmeta.regression.Age_plot,
-                  IGEmeta.regression.Sex_plot,
-                  #IGEmeta.regression.StudyType_plot,
-                  IGEmeta.regression.PopType_plot,
-                  # IGEmeta.regression.Livestock_plot,
-                  nrow = 2, ncol = 2,  
-                  labels = c("(a)", "(b)","(c)","(d)"),common.legend = T)
-                  # nrow = 3, ncol = 2,  
-                  # labels = c("(a)", "(b)","(c)","(d)", "(e)"),common.legend = T)
+  IGEmeta.regression.TraitCat_plot,
+  IGEmeta.regression.Age_plot,
+  IGEmeta.regression.Sex_plot,
+  #IGEmeta.regression.StudyType_plot,
+  IGEmeta.regression.PopType_plot,
+  # IGEmeta.regression.Livestock_plot,
+  nrow = 2, ncol = 2,  
+  labels = c("(a)", "(b)","(c)","(d)"),common.legend = T)
+# nrow = 3, ncol = 2,  
+# labels = c("(a)", "(b)","(c)","(d)", "(e)"),common.legend = T)
 
 fig3T=annotate_figure(fig3, top = text_grob(expression(bold(Social~h^2)), 
                                             color = "black", 
@@ -351,12 +359,12 @@ IGEmeta.regression.Va.vs.Vige_plot <- orchard_plot(mod_results(meta.model.IGE.su
   scale_colour_manual(values=c("#f2d116","aquamarine4"))+
   scale_x_discrete(labels=c("V_a" = "DGE", "V_ige_2" = "IGE"))+
   theme(plot.title = element_text(face="bold", size = 12,hjust = 0.5),
-              legend.direction="horizontal", 
-              legend.title = element_text(size =10),
-              legend.text = element_text(size = 10), 
-              axis.text.y = element_text(size = 15, angle = 90, vjust = 0.5, hjust=0.5),
-              axis.title.x = element_text(size = 15),
-              axis.text.x = element_text(size = 10))
+        legend.direction="horizontal", 
+        legend.title = element_text(size =10),
+        legend.text = element_text(size = 10), 
+        axis.text.y = element_text(size = 15, angle = 90, vjust = 0.5, hjust=0.5),
+        axis.title.x = element_text(size = 15),
+        axis.text.x = element_text(size = 10))
 
 #IGEmeta.regression.Va.vs.Vige_plot
 
@@ -425,7 +433,7 @@ fig4 <- ggarrange(IGEmeta.regression.Va.vs.Vige_plot,IGEmeta.regression.h2.vs.so
 # fig4
 
 ggsave("figures/Fig4A-C.png", plot = fig4, 
-      height = 150, width = 250, units = "mm", dpi = 600)
+       height = 150, width = 250, units = "mm", dpi = 600)
 
 
 ################################################################################
@@ -483,10 +491,10 @@ meta.model.IGE.DGE.IGE.correlation_plot <- orchard_plot(mod_results(meta.model.I
   scale_colour_manual(values="grey")+
   theme(plot.title = element_text(face="bold", size = 15,hjust = 0.5),
         legend.direction="horizontal", legend.title = element_text(size =10),
-      legend.text = element_text(size = 10), 
-      axis.title = element_text(size = 15),
-      axis.text.x = element_text(size = 15),
-      axis.text.y = element_blank()) +
+        legend.text = element_text(size = 10), 
+        axis.title = element_text(size = 15),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_blank()) +
   labs( x="DGE-IGE correlation")
 
 #meta.model.IGE.DGE.IGE.correlation_plot
@@ -538,11 +546,230 @@ dataset.IGE.subset1A$Year_of_Publication.c <- scale(dataset.IGE.subset1A$Year_of
 # Printing the summary results of the model
 print(meta.model.IGE.subset1A.DE, digits=3)
 
-IGEmeta.regression.decline.effects_plot <- orchaRd::bubble_plot(meta.model.IGE.subset1A.DE,
-                                                                    mod = "Year_of_Publication.c", 
-                                                                    group = "Paper_id", 
-                                                                    xlab = "Year of Publication (mean-centred; mean = 2014)", 
-                                                                    ylab = "Indirect Genetic Effects: Social h2 (Zr)", 
-                                                                    legend.pos = "top.left")
+# back.transforming <- function() {
+#   function(x) x + 2014 
+# }
 
-IGEmeta.regression.decline.effects_plot
+IGEmeta.regression.decline.effects_plot <- orchaRd::bubble_plot(meta.model.IGE.subset1A.DE,
+                                                                mod = "Year_of_Publication.c", 
+                                                                group = "Paper_id", 
+                                                                xlab = "Year of Publication", 
+                                                                ylab = "Indirect Genetic Effects: Social h2 (Zr)",
+                                                                #transfm = "tanh",
+                                                                legend.pos = "top.left")
+
+IGEmeta.regression.decline.effects_plot <- IGEmeta.regression.decline.effects_plot + 
+  scale_x_continuous(labels = function(x) x + 2014)
+
+ggsave("figures/FigS6.png", 
+       plot = IGEmeta.regression.decline.effects_plot, height = 100, width = 200, 
+       units = "mm", dpi = 600, bg="white")
+
+
+
+
+################################################################################
+# SENSITIVITY ANALYSES VZr * 10
+################################################################################
+
+################################################################################
+# Q1: What is the proportion of variance in traits explained by IGEs?
+
+meta.model.IGE.subset1A.VZR10x_plot <- orchard_plot(mod_results(meta.model.IGE.subset1A.VZR10x, 
+                                                         mod = "1",
+                                                         group = "Paper_id", 
+                                                         data = dataset.IGE.subset1A), 
+                                             xlab = "Effect size (r)", 
+                                             trunk.size = 2, 
+                                             branch.size = 2,
+                                             alpha = 0.3,
+                                             transfm = "tanh",
+                                             fill = T)+
+  scale_fill_manual(values="grey") +
+  scale_colour_manual(values="grey")+
+  theme(legend.direction="horizontal", legend.title = element_text(size =8),
+        legend.text = element_text(size = 10), 
+        axis.title = element_text(size = 15),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_blank()) +
+  labs( x=expression(Social~h^2))
+
+#meta.model.IGE.subset1A.VZR10x_plot
+
+ggsave("figures/FigS7.png", plot = meta.model.IGE.subset1A.VZR10x_plot, 
+       height = 100, width = 190, units = "mm", dpi = 600)
+
+
+################################################################################
+# Q2: Does the magnitude of IGEs vary among with factors? ####
+
+# 1.	B) Are there differences between: (i.e. moderators for the meta-analysis 
+# on point 1A)
+
+
+################################################################################
+# Trait category
+
+IGEmeta.regression.TraitCat.VZR10x_plot <- orchard_plot(mod_results(IGEmeta.regression.TraitCat.VZR10x, 
+                                                             mod = "Trait_category", 
+                                                             group = "Paper_id", 
+                                                             data = dataset.IGE.subset1A), 
+                                                 xlab = "Effect size (r)",
+                                                 angle = 0, 
+                                                 trunk.size = 2,
+                                                 branch.size = 1.5,
+                                                 alpha = 0.3,
+                                                 transfm = "tanh",
+                                                 fill = T)
+
+IGEmeta.regression.TraitCat.VZR10x_plot = IGEmeta.regression.TraitCat.VZR10x_plot + 
+  theme(plot.title = element_text(face="bold", size = 12,hjust = 0.5),
+        axis.title.y = element_text(size = 15),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 15), 
+        axis.text.x = element_text(size = 10))+
+  scale_x_discrete(labels = c('Behaviour','Development',
+                              'Metabolism & Physiology', "Morphology", 
+                              "Reproduction", "Survival"))
+
+#IGEmeta.regression.TraitCat_plot.VZR10x
+
+ggsave("figures/FigS8.png", plot = IGEmeta.regression.TraitCat.VZR10x_plot, 
+       height = 150, width = 240, units = "mm", dpi = 600)
+
+################################################################################
+# Age
+
+IGEmeta.regression.Age.VZR10x_plot <- orchard_plot(mod_results(IGEmeta.regression.Age.VZR10x, 
+                                                        mod = "Age", 
+                                                        group = "Paper_id", 
+                                                        data = dataset.IGE.subset1A), 
+                                            xlab = "Effect size (r)",
+                                            angle = 0, 
+                                            trunk.size = 2,
+                                            branch.size = 1.5,
+                                            alpha = 0.3,
+                                            transfm = "tanh",
+                                            fill = T)
+
+IGEmeta.regression.Age.VZR10x_plot = IGEmeta.regression.Age.VZR10x_plot+
+  scale_x_discrete(labels=c("Juv" = "      Juvenile", "Ad" = "Adult"))+
+  theme(plot.title = element_text(face="bold", size = 12,hjust = 0.5),
+        axis.title.y = element_text(size = 15),
+        axis.title.x = element_blank(),
+        axis.text.y = element_text(size = 15), 
+        axis.text.x = element_text(size = 10))
+
+#IGEmeta.regression.Age.VZR10x_plot
+
+ggsave("figures/FigS9.png", plot = IGEmeta.regression.Age.VZR10x_plot, 
+       height = 100, width = 190, units = "mm", dpi = 600)
+
+################################################################################
+# Q3:. What's the relative and absolute importance of direct and indirect  
+# genetic effects?
+# a: compare VDGE to the VIGEs
+# b: compare H2 and social H2
+# c: compare direct evolvability vs indirect evolvability (for choices on this 
+# see below)
+################################################################################
+
+################################################################################
+# 3B: h2 vs social h2
+
+IGEmeta.regression.h2.vs.socialh2.VZR10x_plot <- orchard_plot(mod_results(meta.model.IGE.subset3B.VZR10x, 
+                                                                   mod = "direct_social", 
+                                                                   group = "Paper_id", 
+                                                                   data = dataset.IGE.subset3B_long), 
+                                                       xlab =  "Effect size (r)",
+                                                       angle = 0, 
+                                                       trunk.size = 1,
+                                                       branch.size = 1.5,
+                                                       alpha = 0.3,
+                                                       transfm = "tanh",
+                                                       fill = T)+
+  ggtitle("Variance-standardized") +
+  scale_fill_manual(values=c("#f2d116","aquamarine4")) +
+  scale_colour_manual(values=c("#f2d116","aquamarine4"))+
+  scale_x_discrete(labels=c("Social_h2_2_Zr" = "IGE", "H2_2_Zr" = "DGE"))+
+  theme(plot.title = element_text(face="bold", size = 12,hjust = 0.5),
+        #axis.text.y = element_blank(), 
+        axis.title.y = element_text(size = 10),
+        axis.title.x = element_text(size = 15),
+        axis.text.x = element_text(size = 10))
+
+# IGEmeta.regression.h2.vs.socialh2.VZR10x_plot
+
+ggsave("figures/FigS10.png", plot = IGEmeta.regression.h2.vs.socialh2.VZR10x_plot, 
+       height = 100, width = 190, units = "mm", dpi = 600)
+
+################################################################################
+# Q4: Do IGEs typically alter evolutionary trajectories?
+
+
+################################################################################
+# 4A: Total heritability (T2) vs narrow-sense heritability (h2)
+
+IGEmeta.regression.h2.vs.Totalh2.VZR10x_plot <- orchard_plot(mod_results(meta.model.IGE.subset4A.VZR10x, 
+                                                                  mod = "direct_social", 
+                                                                  group = "Paper_id", 
+                                                                  data = dataset.IGE.subset4A_long), 
+                                                      xlab = "Effect size (r)",
+                                                      angle = 0,
+                                                      trunk.size = 2,
+                                                      branch.size = 1.5,
+                                                      alpha = 0.3,
+                                                      #transfm = "tanh",
+                                                      fill = T)+
+  scale_fill_manual(values=c("#f2d116","aquamarine4")) +
+  scale_colour_manual(values=c("#f2d116","aquamarine4"))+
+  scale_x_discrete(labels=c("T2_2" = expression(~tau^2), "H2_2" = expression(~h^2)))+
+  theme(plot.title = element_text(face="bold", size = 15,hjust = 0.5),
+        legend.direction="horizontal", legend.title = element_text(size =10),
+        legend.text = element_text(size = 10), 
+        axis.title = element_text(size = 15),
+        axis.text.y = element_text(size = 15, angle = 90, vjust = 0.5, hjust=0.5),
+        axis.text.x = element_text(size = 15))
+
+#IGEmeta.regression.h2.vs.Totalh2.VZR10x_plot
+# 
+# ggsave("figures/FigS11.png", plot = IGEmeta.regression.h2.vs.Totalh2.VZR10x_plot, 
+#        height = 100, width = 190, units = "mm", dpi = 600)
+
+################################################################################
+# 4B: What is the magnitude of the DGE-IGE correlation?
+
+meta.model.IGE.DGE.IGE.correlation.VZR10x_plot <- orchard_plot(mod_results(meta.model.IGE.subset4B.VZR10x, 
+                                                                    mod = "1", 
+                                                                    group = "Paper_id", 
+                                                                    data = dataset.IGE.subset4B), 
+                                                        xlab = "Effect size (r)",
+                                                        trunk.size = 2, 
+                                                        branch.size = 1.5,
+                                                        alpha = 0.5,
+                                                        transfm = "tanh",
+                                                        fill = T)+
+  scale_fill_manual(values="grey") +
+  scale_colour_manual(values="grey")+
+  theme(plot.title = element_text(face="bold", size = 15,hjust = 0.5),
+        legend.direction="horizontal", legend.title = element_text(size =10),
+        legend.text = element_text(size = 10), 
+        axis.title = element_text(size = 15),
+        axis.text.x = element_text(size = 15),
+        axis.text.y = element_blank()) +
+  labs( x="DGE-IGE correlation")
+
+# meta.model.IGE.DGE.IGE.correlation.VZR10x_plot
+
+# ggsave("figures/FigS12.png", plot = meta.model.IGE.DGE.IGE.correlation.VZR10x_plot, 
+#        height = 100, width = 190, units = "mm", dpi = 600)
+
+figS11 <- ggarrange(IGEmeta.regression.h2.vs.Totalh2.VZR10x_plot,
+                    meta.model.IGE.DGE.IGE.correlation.VZR10x_plot, ncol = 2,  nrow = 1, 
+                  labels = c("(a)", "(b)"), common.legend = T,
+                  font.label=list(color="black",size=10)) 
+
+#fig5
+
+ggsave("figures/FigS11.png", 
+       plot = figS11, height = 100, width = 200, units = "mm", dpi = 600, bg="white")
