@@ -6,9 +6,11 @@ This repository contains the data, code and other materials used in the followin
 
 ---
 
-Francesca Santostefano*, Maria Moiron*, Alfredo Sánchez-Tójar*, David N. Fisher*. 2024. *Indirect genetic effects increase the heritable variation available to selection and are largest for behaviours: a meta-analysis*. Under review in Evolution Letters. The preprint is available [here](https://doi.org/10.1101/2024.05.17.594196)
+Francesca Santostefano*, Maria Moiron*, Alfredo Sánchez-Tójar*, David N. Fisher*. *In Press*. **Indirect genetic effects increase the heritable variation available to selection and are largest for behaviours: a meta-analysis**. Evolution Letters. 
 
 *All authors contributed equally to this work
+
+The preprint is available [here](https://doi.org/10.1101/2024.05.17.594196)
 
 ---
 
