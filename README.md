@@ -1,4 +1,4 @@
-DOI: to be added via the Zenodo integration upon acceptance of this work in a scientific journal.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13766382.svg)](https://doi.org/10.5281/zenodo.13766382)
 
 # Meta-analysis of Indirect Genetic Effects
 
